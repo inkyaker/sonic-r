@@ -1,7 +1,7 @@
 import _OBJBase from "../Base"
 import Client from "Code/Client/Client"
 
-@AirshipComponentMenu("Object/DashRAmp")
+@AirshipComponentMenu("Object/DashRamp")
 export default class _OBJDashRamp extends _OBJBase {
     public Velocity = 6
     public LockTime = 0
@@ -11,11 +11,9 @@ export default class _OBJDashRamp extends _OBJBase {
 
         Client.Speed = Client.Speed.WithX(this.Velocity)
 
-        Client.Sound.Play("Object/DashPanel/Activate.mp3")
+        Client.Sound.Play("Object/DashRamp/Activate.mp3")
 
-        const Offset = this.Collider.transform.InverseTransformPoint(Client.Position)
-
-        Client.Position = this.Collider.transform.TransformPoint(Vector3.forward.mul(Offset.z))
+        Client.Position = this.Collider.transform.position
         Client.Angle = this.Collider.transform.rotation
 
         Client.Flags.LockTimer = math.ceil(this.LockTime * 60)

@@ -18,8 +18,10 @@ export function CheckSpindash(Client: Client) {
 
         Client.Sound.Play("Character/SpindashCharge.wav", {
             CompleteConfig: {
-                Loop: true
+                Loop: true,
+                BoundState: "Spindash"
             },
+            BoundState: "Spindash",
             PlayOnComplete: "Character/SpindashChargeLoop.wav"
         })
 

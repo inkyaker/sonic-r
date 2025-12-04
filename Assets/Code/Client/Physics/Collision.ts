@@ -134,18 +134,17 @@ function WallCollide(Client: Client, Y: number, Direction: Vector3, Velocity: nu
  * @param Client
  */
 export function RunCollision(Client: Client) {
-    //Remember previous state
-    const PreviousSpeed = Client.ToGlobal(Client.Speed)
-
     //Stick to moving floors
     if (Client.Ground.Grounded && Client.Ground.Floor) {
-        const PreviousWorld = Client.Ground.FloorLast!.mul(Client.Ground.FloorOffset)
-        const NewWorld = CFrame.FromTransform(Client.Ground.Floor.transform).mul(Client.Ground.FloorOffset)
-        const RightDiff = Quaternion.FromToRotation(PreviousWorld.Rotation.mul(Vector3.right), NewWorld.Rotation.mul(Vector3.right))
-        const FloorDifference = NewWorld.Position.sub(PreviousWorld.Position)
+        const Current = CFrame.FromTransform(Client.Ground.Floor)
 
-        Client.Position = Client.Position.add(FloorDifference)
-        Client.Angle = RightDiff.mul(Client.Angle)
+        const PreviousWorld = Client.Ground.FloorLast!.mul(Client.Ground.FloorOffset)
+        const NewWorld = Current.mul(Client.Ground.FloorOffset)
+        const Diff = Quaternion.FromToRotation(PreviousWorld.Rotation.mul(Vector3.forward), NewWorld.Rotation.mul(Vector3.forward))
+
+        Client.Ground.FloorSpeed = NewWorld.Position.sub(PreviousWorld.Position)
+        Client.Position = Client.Position.add(Client.Ground.FloorSpeed)
+        Client.Angle = Diff.mul(Client.Angle)
     }
 
     for (const i of $range(1, 4)) {

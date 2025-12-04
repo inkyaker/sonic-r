@@ -3,6 +3,7 @@ import { StateList } from "./States"
 import { SrcState } from "./Modules/State"
 import { CFrame } from "Code/Shared/Types"
 import Config, { Constants } from "Code/Shared/Components/ConfigSingleton"
+import { MovingPlatforms } from "Code/Shared/Components/MovingPlatform"
 
 /**
  * State machine
@@ -82,6 +83,13 @@ export class StateMachine {
 
             this.Client.Animation.Turn = 0
 
+            // Other objects
+            for (const [_, Value] of pairs(MovingPlatforms)) {
+                // TODO: consider changing to Object
+                Value.ClientHookedUpdate()
+            }
+
+            // Game objects
             this.Client.Object.TickObjects()
             this.TickState()
 

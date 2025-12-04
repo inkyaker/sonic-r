@@ -16,6 +16,7 @@ export default class _OBJSpring extends _OBJBase implements AnimatedObject<"None
 
     override Inject() {
         this.HomingTarget = true
+        this.HomingWeight = 1
 
         AnimateObject.Inject(this)
     }

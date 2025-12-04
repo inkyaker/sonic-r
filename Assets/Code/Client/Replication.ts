@@ -54,7 +54,6 @@ export default class ClientReplicator extends AirshipBehaviour {
             }
 
             if (this.Changed.size() > 0) {
-                print(this.Changed)
                 Network.Replication.ChangedPacket.client.FireServer(this.Changed)
                 this.Changed.clear()
             }
