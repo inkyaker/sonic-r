@@ -42,7 +42,6 @@ class Flags {
     public SpindashSpeed = 0
     public Bounces = 0
     public InBounce = false
-    public AirKickEnabled = false
 
     /**
      * Amount of updates joystick input should be locked for
@@ -375,7 +374,6 @@ export default class Client extends AirshipBehaviour {
      */
     public ResetObjectState() {
         this.Flags.DirectVelocity = false
-        this.Flags.AirKickEnabled = false
         this.Flags.InBounce = false
         this.Flags.LockTimer = 0
         this.Rail.RailTrick = 0

@@ -4,7 +4,6 @@ import { CheckBounce } from "./Bounce"
 import { CheckHomingAttack } from "./Homing"
 import { SrcState } from "./State"
 import { CheckRail } from "./Rail"
-import { CheckAirKick } from "./Airkick"
 
 /**
  * @class
@@ -16,7 +15,7 @@ export class StateAirborne extends SrcState {
     }
 
     protected CheckInput(Client: Client) {
-        return CheckHomingAttack(Client) || CheckAirKick(Client) || CheckBounce(Client) || CheckRail(Client)
+        return CheckHomingAttack(Client) || CheckBounce(Client) || CheckRail(Client)
     }
 
     protected BeforeUpdateHook(Client: Client) {

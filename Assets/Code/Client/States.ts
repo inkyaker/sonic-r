@@ -4,7 +4,6 @@ import { StateAirborne } from "./Modules/Airborne"
 import { StateGrounded } from "./Modules/Grounded"
 import { StateNone } from "./Modules/None"
 import { StateRail } from "./Modules/Rail"
-import { StateAirKick } from "./Modules/Airkick"
 import { StateHurt } from "./Modules/Hurt"
 import { StateHoming } from "./Modules/Homing"
 
@@ -24,6 +23,5 @@ export class StateList {
     public Roll = new StateRoll
     public Skid = new StateSkid
     public Rail = new StateRail
-    public AirKick = new StateAirKick
     public Homing = new StateHoming
 }

@@ -21,7 +21,6 @@ export class Input {
             Spindash: new ButtonState([Key.E, Key.LeftShift]),
             Roll: new ButtonState([Key.E, Key.LeftShift]),
             Bounce: new ButtonState([Key.E, Key.LeftShift]),
-            AirKick: new ButtonState([Key.R]),
 
             Debug: new ButtonState([Key.Digit1])
         }
