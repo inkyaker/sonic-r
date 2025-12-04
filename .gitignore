@@ -110,7 +110,6 @@ Assets/TypeScriptEditorMetadata.aseditorinfo
 
 **/TextMesh Pro
 *.exr
-*.unity
 **/.vscode
 *.prettierrc
 *.lighting
@@ -120,8 +119,6 @@ Assets/TypeScriptEditorMetadata.aseditorinfo
 **/eslint.config.ts
 **/ProjectSettings
 *.bytes
-*.exr
-**/Scenes
 **/Editor/*.config
 
 # Ignore all non-local packages
