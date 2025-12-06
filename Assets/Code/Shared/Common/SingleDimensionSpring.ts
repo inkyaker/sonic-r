@@ -12,6 +12,7 @@ export class SingleDimensionSpring {
         if (Set) {
             this.TargetValue = TargetValue
             this.CurrentValue = this.TargetValue
+            this.Velocity = 0
             
             return
         }
