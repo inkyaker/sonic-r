@@ -2,23 +2,27 @@ import { CFrame } from "Code/Shared/Types"
 import _OBJBase from "../Base"
 import Client from "Code/Client/Client"
 import { AnimatedObject, AnimateObject } from "../Implementables"
+import { RegisterObject } from "../../ObjectController"
+
+type Animations = "None" | "Activate"
 
 @AirshipComponentMenu("Object/Spring")
-export default class _OBJSpring extends _OBJBase implements AnimatedObject<"None" | "Activate"> {
+export default class _OBJSpring extends _OBJBase implements AnimateObject<Animations> {
     public Animator: Animator
     public Listener: AnimationEventListener
-    public AnimationState: "None" | "Activate" = "None"
+    public AnimationController: AnimatedObject<Animations> = new AnimatedObject(this)
+
     public Velocity = new Vector3(0, 2, 0)
     public Wide = false
     public ForceAngle = false
     public DirectVelocity = false
     public LockTime = 0
 
-    override Inject() {
+    override InitObject() {
+        RegisterObject(this)
+
         this.HomingTarget = true
         this.HomingWeight = 1
-
-        AnimateObject.Inject(this)
     }
 
     override OnTouch(Client: Client) {
@@ -49,7 +53,7 @@ export default class _OBJSpring extends _OBJBase implements AnimatedObject<"None
         Client.Animation.Current = "Spring"
         Client.Ground.Grounded = false
 
-        this.AnimationState = "Activate"
+        this.AnimationController.AnimationState = "Activate"
 
         this.Debounce = 6
     }
@@ -57,6 +61,6 @@ export default class _OBJSpring extends _OBJBase implements AnimatedObject<"None
     public UpdateAnimationState() { }
 
     public AnimationEnded() {
-        this.AnimationState = "None"
+        this.AnimationController.AnimationState = "None"
     }
 }

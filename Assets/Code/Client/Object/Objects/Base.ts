@@ -8,7 +8,7 @@ export default class _OBJBase extends AirshipBehaviour {
     @NonSerialized() public HomingWeight = 1
     protected Connections = new Bin()
     protected Debounce = 0
-    public readonly Injects = {
+    public readonly meta = {
         AnimationLoader: false
     }
 
@@ -16,15 +16,6 @@ export default class _OBJBase extends AirshipBehaviour {
         if ($CLIENT) {
             this.InitObject()
         }
-
-        this.Inject()
-    }
-
-    /**
-     * Runs on start for object implementation injection, override per object.
-     */
-    public Inject() {
-
     }
 
     public InitObject() {
@@ -64,8 +55,8 @@ export default class _OBJBase extends AirshipBehaviour {
     public Draw(DeltaTime: number) {
         this.PreRender(DeltaTime)
 
-        if (this.Injects.AnimationLoader) {
-            (this as unknown as {Animate: (this: unknown) => void}).Animate()
+        if (this.meta.AnimationLoader) {
+            (this as unknown as { AnimationController: { Animate: (this: unknown) => void } }).AnimationController.Animate()
         }
     }
 

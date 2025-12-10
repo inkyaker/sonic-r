@@ -1,38 +1,35 @@
 import _OBJBase from "./Base"
 
-export interface AnimatedObject<States extends string> {
+export interface AnimateObject<States extends string> {
     Animator: Animator
-    AnimationState: States
     Listener: AnimationEventListener
+    AnimationController: AnimatedObject<States>
 
     UpdateAnimationState(): void
     AnimationEnded(): void
 }
 
-/**
- * Injects the object animation player into your Object class
- */
-export const AnimateObject = {
-    Inject: function (Class: _OBJBase & AnimatedObject<string>) {
-        if ((Class as unknown as { Animator: unknown }).Animator === undefined) {
-            error(`Class ${Class} missing AnimatedObject injection!`)
-        }
+export class AnimatedObject<T extends string> {
+    public LastAnimation: string
+    public AnimationState: string
 
-        Class.Injects.AnimationLoader = true
+    constructor(private Base: _OBJBase & AnimateObject<T>) {
+        assert(Base.Animator !== undefined, `Class ${Base} missing AnimatedObject injection!`)
 
-        let LastAnimation = "0";
-        (Class as unknown as { Animate: (this: _OBJBase & AnimatedObject<string>) => void }).Animate = function (this: _OBJBase & AnimatedObject<string>) {
-            this.UpdateAnimationState()
+        Base.meta.AnimationLoader = true
 
-            if (LastAnimation !== this.AnimationState) {
-                this.Animator.CrossFadeInFixedTime(this.AnimationState, .15, 0)
-                LastAnimation = this.AnimationState
-            }
-        }
-
-        Class.Listener.OnAnimEvent((Key) => {
+        Base.Listener.OnAnimEvent((Key) => {
             if (Key === "EndAnimation")
-                Class.AnimationEnded()
+                Base.AnimationEnded()
         })
+    }
+
+    public Animate(this: _OBJBase & AnimateObject<T> & { AnimationController: AnimatedObject<T> }) {
+        this.UpdateAnimationState()
+
+        if (this.AnimationController.LastAnimation !== this.AnimationController.AnimationState) {
+            this.Animator.CrossFadeInFixedTime(this.AnimationController.AnimationState, .15, 0)
+            this.AnimationController.LastAnimation = this.AnimationController.AnimationState
+        }
     }
 }
