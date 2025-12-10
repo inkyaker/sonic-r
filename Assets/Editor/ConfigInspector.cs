@@ -74,11 +74,11 @@ public class ConfigEditor : AirshipEditor
         PropertyField("Character");
         AirshipEditorGUI.BeginGroup(new GUIContent("Character Properties"));
         
+        // to fix the deprecated warning. i think this is worse
         var Character = serializedObject.targetObject.GameObject().GetAirshipComponent(AirshipType.GetType("Character"));
         if (Character)
         {
             CharacterEditor Editor = (CharacterEditor)AirshipCustomEditors.GetEditor(Character);
-            Editor.serializedObject = new AirshipSerializedObject(Character);
             Editor.DrawContained();
         }
 

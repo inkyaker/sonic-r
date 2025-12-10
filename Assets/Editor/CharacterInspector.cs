@@ -4,17 +4,7 @@ using UnityEngine;
 public class CharacterEditor : AirshipEditor
 {
     private int Tab = 0;
-
-    public new AirshipSerializedObject serializedObject;
-    public new void PropertyFields(params string[] Input)
-    {
-        foreach (string Property in Input)
-        {
-            PropertyField(serializedObject.FindAirshipProperty(Property));
-        }
-    }
-
-    // overriding serializedObject means doing anything here breaks in the real inspector
+    
     public override void OnInspectorGUI()
     {
     }
