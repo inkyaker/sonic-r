@@ -10,11 +10,6 @@ export default class TagCheckSingleton extends AirshipSingleton {
             })
             
             this.FoundTags.set(v, Test ? true : false)
-
-            if (Test)
-                print(`Tag ${v} EXISTS!`)
-            else
-                print(`Tag ${v} FAILED!`)
         }
     }
 
