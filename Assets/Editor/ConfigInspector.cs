@@ -1,4 +1,5 @@
 using Luau;
+using Unity.VisualScripting;
 using UnityEngine;
 
 [CustomAirshipEditor("Config")]
@@ -15,8 +16,8 @@ public class ConfigEditor : AirshipEditor
             new GUIContent("Framework"),
             new GUIContent("CharacterInfo")
         });
-        
-        switch (Tab) 
+
+        switch (Tab)
         {
             case 0:
                 DrawAnimationTab();
@@ -41,7 +42,7 @@ public class ConfigEditor : AirshipEditor
     void DrawAnimationTab()
     {
         AirshipEditorGUI.BeginGroup(new GUIContent("Animation"));
-        PropertyFields("RigAnimationTilt", "HeadTilt", "EyeTilt");                                                              
+        PropertyFields("RigAnimationTilt", "HeadTilt", "EyeTilt");
         AirshipEditorGUI.EndGroup();
 
         AirshipEditorGUI.BeginGroup(new GUIContent("JumpBall"));
@@ -60,7 +61,7 @@ public class ConfigEditor : AirshipEditor
 
     void DrawControlTab()
     {
-        PropertyFields("CameraSensitivityCurve");                                                                                       
+        PropertyFields("CameraSensitivityCurve");
     }
 
     void DrawFrameworkTab()
@@ -72,11 +73,12 @@ public class ConfigEditor : AirshipEditor
     {
         PropertyField("Character");
         AirshipEditorGUI.BeginGroup(new GUIContent("Character Properties"));
-        
-        var Character = serializedObject.airshipComponent.gameObject.GetAirshipComponent(AirshipType.GetType("Character"));
+
+        var Character = serializedObject.targetObject.GameObject().GetAirshipComponent(AirshipType.GetType("Character"));
         if (Character)
         {
-            CharacterEditor Editor = (CharacterEditor)AirshipCustomEditors.GetEditor(Character); // can this fail?
+            CharacterEditor Editor = (CharacterEditor)AirshipCustomEditors.GetEditor(Character);
+            Editor.serializedObject = new AirshipSerializedObject(Character);
             Editor.DrawContained();
         }
 

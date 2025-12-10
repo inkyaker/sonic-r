@@ -1,17 +1,22 @@
-using System;
-using System.Collections.Generic;
-using Luau;
-using Unity.VisualScripting;
-using UnityEditor;
 using UnityEngine;
 
 [CustomAirshipEditor("Character")]
 public class CharacterEditor : AirshipEditor
 {
     private int Tab = 0;
+
+    public new AirshipSerializedObject serializedObject;
+    public new void PropertyFields(params string[] Input)
+    {
+        foreach (string Property in Input)
+        {
+            PropertyField(serializedObject.FindAirshipProperty(Property));
+        }
+    }
+
+    // overriding serializedObject means doing anything here breaks in the real inspector
     public override void OnInspectorGUI()
     {
-
     }
     public void DrawContained()
     {
@@ -40,6 +45,8 @@ public class CharacterEditor : AirshipEditor
         }
 
         AirshipEditorGUI.EndTabs();
+
+        serializedObject.ApplyModifiedProperties();
     }
 
     void DrawCollision()
