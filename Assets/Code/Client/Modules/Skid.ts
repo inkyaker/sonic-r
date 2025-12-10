@@ -1,4 +1,4 @@
-import Client from "Code/Client/Client"
+import DSClient from "Code/Client/Client"
 import { PhysicsHandler } from "Code/Client/Physics/Physics"
 import { SrcState } from "./State"
 
@@ -8,7 +8,7 @@ import { SrcState } from "./State"
  * @param Client 
  * @returns Move successful
  */
-export function CheckSkid(Client: Client) {
+export function CheckSkid(Client: DSClient) {
     if (Client.Speed.x < Client.Config.JogSpeed) { return }
 
     const [HasControl, Turn] = Client.Input.Get()
@@ -31,7 +31,7 @@ export function CheckSkid(Client: Client) {
  * @param Client 
  * @returns Move successful
  */
-export function CheckStopSkid(Client: Client) {
+export function CheckStopSkid(Client: DSClient) {
     if (Client.Speed.x <= .01) {
         Client.Speed = Client.Speed.mul(new Vector3(0, 1, 1))
         Client.State.Current = Client.State.States.Grounded
@@ -59,11 +59,11 @@ export class StateSkid extends SrcState {
         super()
     }
 
-    protected CheckInput(Client: Client) {
+    protected CheckInput(Client: DSClient) {
         return CheckStopSkid(Client)
     }
 
-    protected AfterUpdateHook(Client: Client) {
+    protected AfterUpdateHook(Client: DSClient) {
         PhysicsHandler.ApplyGravity(Client)
         PhysicsHandler.Skid(Client)
     }

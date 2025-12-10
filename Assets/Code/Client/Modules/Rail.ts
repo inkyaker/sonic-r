@@ -1,4 +1,4 @@
-import Client from "Code/Client/Client"
+import DSClient from "Code/Client/Client"
 import { CheckJump } from "./Jump"
 import { SrcState } from "./State"
 import { Signal } from "@Easy/Core/Shared/Util/Signal"
@@ -28,11 +28,11 @@ export class Rail {
     public Connections: Signal[] = []
 }
 
-export function RailActive(Client: Client) {
+export function RailActive(Client: DSClient) {
     return Client.State.Current === Client.State.States.Rail && Client.Rail.RailOffset.magnitude < 0.5
 }
 
-export function GetRailPosition(Client: Client) {
+export function GetRailPosition(Client: DSClient) {
     assert(Client.Rail.Current, "GetRailPosition() called without Client.Rail.Current being set, did you mean to call this function?")
     const RailCFrame = CFrame.FromTransform(Client.Rail.Current)
     const Offset = RailCFrame.Inverse().mul(Client.Position)
@@ -40,7 +40,7 @@ export function GetRailPosition(Client: Client) {
     //return RailCFrame.mul(new Vector3(0, Client.Rail.Current.Size.Y / 2, Offset.Z))
 }
 
-export function GetRailAngle(Client: Client) {
+export function GetRailAngle(Client: DSClient) {
     /*
      if (Client.Rail.Current) {
          let Angle
@@ -55,7 +55,7 @@ export function GetRailAngle(Client: Client) {
      */
 }
 
-export function SetRail(Client: Client, Part?: GameObject) {
+export function SetRail(Client: DSClient, Part?: GameObject) {
     /*
     const Rail = Client.Rail
 
@@ -129,17 +129,17 @@ export function SetRail(Client: Client, Part?: GameObject) {
  * 
  * @move
  */
-export function CheckRail(Client: Client) {
+export function CheckRail(Client: DSClient) {
     if (Client.Rail.RailDebounce > 0 || Client.Rail.Current) { return false }
     const Rail = Client.State.States.Rail
     const LastPosition = Client.LastCFrame.Position
 
     if (LastPosition !== Client.Position) {
-        const Rails = Physics.OverlapSphere(Client.Position, Client.Config.Radius*2, Constants().Masks().RailLayer)
+        const Rails = Physics.OverlapSphere(Client.Position, Client.Config.Radius * 2, Constants().Masks().RailLayer)
 
         for (const [_, Collider] of pairs(Rails)) {
             const Spline = Collider.gameObject.GetComponent<SplineContainer>();
-            
+
             if (!Spline) continue
 
             //const [NearpPos,Delta] = (SplineUtility as unknown as {GetNearestPoint<T>(this: SplineUtility, Spline: T, Point: float3, Res?: number, It?: number): [float3, number]}).GetNearestPoint(Spline, ToFloat3(Client.Position), 4, 2)
@@ -165,7 +165,7 @@ export class StateRail extends SrcState {
         super()
     }
 
-    protected CheckInput(Client: Client) {
+    protected CheckInput(Client: DSClient) {
         if (CheckJump(Client)) {
             SetRail(Client)
 
@@ -173,15 +173,15 @@ export class StateRail extends SrcState {
         }
     }
 
-    protected BeforeUpdateHook(Client: Client) {
-        
+    protected BeforeUpdateHook(Client: DSClient) {
+
     }
 
-    protected AfterUpdateHook(Client: Client) {
-        
+    protected AfterUpdateHook(Client: DSClient) {
+
     }
 
-    protected OnStep(Client: Client) {
+    protected OnStep(Client: DSClient) {
         if (Client.Rail.RailDebounce > 0) {
             Client.Rail.RailDebounce--
         }

@@ -12,9 +12,14 @@ export default class SettingsSingleton extends AirshipSingleton {
             Settings.MusicVolume = Volume
         })
 
-        Airship.Settings.AddSlider("Additional Camera Sens.", 1, 0, 3, .01)
-        Airship.Settings.ObserveSlider("Additional Camera Sens.", (Sens) => {
-            Settings.CameraSensitivity = Sens
+        Airship.Settings.AddSlider("Mouse Camera Sens.", 1, 0, 3, .01)
+        Airship.Settings.ObserveSlider("Mouse Camera Sens.", (Sens) => {
+            Settings.CameraSensitivityMouse = Sens
+        })
+
+        Airship.Settings.AddSlider("Controller Camera Sens.", 1, 0, 3, .01)
+        Airship.Settings.ObserveSlider("Controller Camera Sens.", (Sens) => {
+            Settings.CameraSensitivityController = Sens
         })
     }
 }
@@ -23,5 +28,6 @@ export const Settings = {
     SFXVolume: 0,
     MusicVolume: 0,
 
-    CameraSensitivity: 0,
+    CameraSensitivityMouse: 0,
+    CameraSensitivityController: 0,
 }

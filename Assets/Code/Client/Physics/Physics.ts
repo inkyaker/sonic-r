@@ -1,5 +1,5 @@
 import { Constants } from "Code/Shared/Components/ConfigSingleton";
-import Client from "../Client";
+import DSClient from "../Client";
 import * as VUtil from "Code/Shared/Common/Utility/VUtil";
 import _OBJBase from "../Object/Objects/Base";
 
@@ -14,7 +14,7 @@ export const PhysicsHandler = {
      * Apply grounded acceleration, gravity calculations are separate
      * @param Client 
      */
-    AccelerateGrounded: (Client: Client) => {
+    AccelerateGrounded: (Client: DSClient) => {
         const MaxXSpeed = Client.Config.MaxXSpeed
         const RunAcceleration = Client.GetRunAcceleration()
         const Friction = /*self.flag.grounded and self.frict_mult*/ 1 || 1
@@ -125,7 +125,7 @@ export const PhysicsHandler = {
      * Apply airborne acceleration, gravity calculations are separate
      * @param Client 
      */
-    AccelerateAirborne: (Client: Client) => {
+    AccelerateAirborne: (Client: DSClient) => {
         //Get analogue state
         const [HasControl, Turn, Magnitude] = Client.Input.Get()
 
@@ -161,7 +161,7 @@ export const PhysicsHandler = {
     },
 
     // Gravity
-    ApplyGravity: (Client: Client) => {
+    ApplyGravity: (Client: DSClient) => {
         if (Client.IsScripted()) { return }
 
         const Weight = Client.GetWeight()
@@ -201,7 +201,7 @@ export const PhysicsHandler = {
     },
 
     // Movement
-    AlignToGravity: (Client: Client) => {
+    AlignToGravity: (Client: DSClient) => {
         if (Client.IsScripted()) { return }
 
         //Remember previous speed
@@ -225,7 +225,7 @@ export const PhysicsHandler = {
         Client.Speed = Client.ToLocal(prev_spd)
     },
 
-    RotateWithGravity: (Client: Client) => {
+    RotateWithGravity: (Client: DSClient) => {
         const GlobalSpeed = Client.ToGlobal(Client.Speed)
         const DotProduct = GlobalSpeed.normalized.Dot(Client.Flags.Gravity.normalized)
 
@@ -252,7 +252,7 @@ export const PhysicsHandler = {
      * Used in `Skid` and `Spindash`
      * @param Client 
      */
-    Skid: (Client: Client) => {
+    Skid: (Client: DSClient) => {
         const FrictionMultiplier = 1 // TODO: fricton mult
 
         const XFriction = Client.Config.SkidFriction * FrictionMultiplier
@@ -265,7 +265,7 @@ export const PhysicsHandler = {
      * Replacement function for `AccelerateGrounded` and `AccelerateAirborne` for the `Roll` state, disables acceleration and keeps speed
      * @param Client 
      */
-    ApplyInertia: (Client: Client) => {
+    ApplyInertia: (Client: DSClient) => {
         // TODO: see if i can seperate the gravity from this
         const Weight = Client.GetWeight()
         let Acceleration = Client.ToLocal(Client.Flags.Gravity.mul(Weight))
@@ -294,7 +294,7 @@ export const PhysicsHandler = {
      * @param Client 
      * @param Turn Amount in radians to turn
      */
-    TurnRaw: (Client: Client, Turn: number) => {
+    TurnRaw: (Client: DSClient, Turn: number) => {
         Client.Angle = Client.Angle.mul(Quaternion.Euler(0, math.deg(Turn), 0))
     },
 
@@ -311,7 +311,7 @@ export const PhysicsHandler = {
      * @param Turn Amount in radians to turn
      * @param IState Inertia configs to match Digital Swirl
      */
-    Turn: (Client: Client, Turn: number, IState?: IntertiaState) => {
+    Turn: (Client: DSClient, Turn: number, IState?: IntertiaState) => {
         let MaxTurn = math.abs(Turn)
         const [HasControl] = Client.Input.Get()
         const PreviousSpeed = Client.ToGlobal(Client.Speed)
@@ -400,7 +400,7 @@ export const PhysicsHandler = {
         return 0
     },
 
-    GetHomingObject(Client: Client): _OBJBase|undefined {
+    GetHomingObject(Client: DSClient): _OBJBase | undefined {
         const Look = Client.Angle.mul(Vector3.forward)
         const Colliders = Physics.OverlapSphere(Client.Position, 25, Constants().Masks().ObjectLayer) as BoxCollider[]
         const Objects = []

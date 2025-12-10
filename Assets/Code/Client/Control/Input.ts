@@ -1,28 +1,45 @@
 import { Keyboard } from "@Easy/Core/Shared/UserInput";
-import Client from "../Client";
+import DSClient from "../Client";
 import { ButtonState } from "./ButtonState";
 import * as VUtil from "Code/Shared/Common/Utility/VUtil";
 
-type ButtonUnion = ExtractKeys<Input["Button"], ButtonState>
+type ButtonUnion = ExtractKeys<DSInput["Button"], ButtonState>
+
+const ButtonHash = new Map<Key | KeyCode, ButtonUnion[]>()
+
+export const ControllerMap = {
+    ButtonA: KeyCode.JoystickButton0,
+    ButtonB: KeyCode.JoystickButton1,
+    ButtonX: KeyCode.JoystickButton2,
+    ButtonY: KeyCode.JoystickButton3,
+
+    LB: KeyCode.JoystickButton4,
+    RB: KeyCode.JoystickButton5,
+    Pause: KeyCode.JoystickButton6,
+    Start: KeyCode.JoystickButton7,
+
+    LStick: KeyCode.JoystickButton8,
+    RStick: KeyCode.JoystickButton9,
+}
 
 /**
  * @class
  */
-export class Input {
+export class DSInput {
     public Button
     public PlatformContext: string
     public Stick
-    private Client: Client
+    private Client: DSClient
 
-    constructor(Client: Client) {
+    constructor(Client: DSClient) {
         this.Client = Client
         this.Button = {
-            Jump: new ButtonState([Key.Space]),
-            Spindash: new ButtonState([Key.E, Key.LeftShift]),
-            Roll: new ButtonState([Key.E, Key.LeftShift]),
-            Bounce: new ButtonState([Key.E, Key.LeftShift]),
+            Jump: new ButtonState([Key.Space], [ControllerMap.ButtonA]),
+            Spindash: new ButtonState([Key.E, Key.LeftShift], [ControllerMap.ButtonX, ControllerMap.ButtonB]),
+            Roll: new ButtonState([Key.E, Key.LeftShift], [ControllerMap.ButtonX, ControllerMap.ButtonB]),
+            Bounce: new ButtonState([Key.E, Key.LeftShift], [ControllerMap.ButtonX, ControllerMap.ButtonB]),
 
-            Debug: new ButtonState([Key.Digit1])
+            Debug: new ButtonState([Key.Digit1], [ControllerMap.LB])
         }
 
         this.PlatformContext = "PC"
@@ -34,42 +51,48 @@ export class Input {
      * @param Key Key
      * @returns List of all k
      */
-    public KeyCodeToButton(Key: Key) {
-        const List: ButtonUnion[] = []
-        for (const [Index, Button] of pairs(this.Button)) {
-            const Target = Button.KeyCodes.find(Object => Object === Key)
-            if (Target) {
-                List.push(Index)
-            }
+    public KeyToButton(Key: Key | KeyCode) {
+        let Hashed = ButtonHash.get(Key)
+
+        if (!Hashed) {
+            const List: ButtonUnion[] = []
+            for (const [Index, Button] of pairs(this.Button)) {
+                if (Button.Keys.find(Object => Object === Key)) {
+                    List.push(Index)
+                }
+
+                if (Button.KeyCodes.find(Object => Object === Key)) {
+                    List.push(Index)
+                }
+            }  
+
+            Hashed = List
+            ButtonHash.set(Key, Hashed)
         }
 
-        return List
+        return Hashed
     }
 
     public GetInputState() {
-        const KeyboardState = new Set<Key>()
+        const KeyState = new Set<Key|KeyCode>()
 
         for (const [ID, State] of pairs(this.Button)) {
-            for (const [_, Button] of pairs(State.KeyCodes)) {
+            for (const [_, Button] of pairs(State.Keys)) {
                 if (Keyboard.IsKeyDown(Button)) {
-                    KeyboardState.add(Button)
+                    KeyState.add(Button)
+                }
+            }
+
+            for (const [_, Button] of pairs(State.KeyCodes)) {
+                if (Input.GetKey(Button)) {
+                    KeyState.add(Button)
                 }
             }
         }
 
-        return $tuple(KeyboardState)//, ControllerState, MobileState)
-    }
-
-    /**
-     * Update input
-     */
-    public Update() {
-        const [KeyboardState] = this.GetInputState()
-
-        let KeyList = new Set<string>()
-
-        KeyboardState.forEach((Key) => {
-            const List = this.KeyCodeToButton(Key)
+        const KeyList = new Set<string>()
+        for (const [Key] of pairs(KeyState)) {
+            const List = this.KeyToButton(Key)
             List.forEach((Key) => {
                 if (Key) {
                     if (!KeyList.has(Key)) {
@@ -79,7 +102,16 @@ export class Input {
                     }
                 }
             })
-        })
+        }
+        
+        return KeyList
+    }
+
+    /**
+     * Update input
+     */
+    public Update() {
+        const KeyList = this.GetInputState()
 
         // Update unpressed keys
         for (const [Index, Button] of pairs(this.Button)) {
@@ -89,10 +121,8 @@ export class Input {
         }
 
         // Stick
-        let PCStickX = (Keyboard.IsKeyDown(Key.D) && 1 || 0) - (Keyboard.IsKeyDown(Key.A) && 1 || 0)
-        let PCStickY = (Keyboard.IsKeyDown(Key.S) && 1 || 0) - (Keyboard.IsKeyDown(Key.W) && 1 || 0)
+        this.Stick = new Vector2(Input.GetAxis("HorizontalKB"), Input.GetAxis("VerticalKB")).add(new Vector2(Input.GetAxis("HorizontalJS"), -Input.GetAxis("VerticalJS")))
 
-        this.Stick = new Vector2(PCStickX, PCStickY)
         if (this.Stick.magnitude > 1) { this.Stick = this.Stick.normalized }
 
         // TODO: mobile stick

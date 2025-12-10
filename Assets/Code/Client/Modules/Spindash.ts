@@ -1,4 +1,4 @@
-import Client from "Code/Client/Client"
+import DSClient from "Code/Client/Client"
 import { PhysicsHandler } from "Code/Client/Physics/Physics"
 import { SrcState } from "./State"
 import { CheckJump } from "./Jump"
@@ -10,7 +10,7 @@ import { CheckRail } from "./Rail"
  * @param Client 
  * @returns Move successful
  */
-export function CheckSpindash(Client: Client) {
+export function CheckSpindash(Client: DSClient) {
     if (Client.Input.Button.Spindash.Pressed) {
         Client.State.Current = Client.State.States.Spindash
         Client.Flags.SpindashSpeed = math.max(Client.Speed.x, 3)
@@ -39,7 +39,7 @@ export class StateSpindash extends SrcState {
         super()
     }
 
-    protected CheckInput(Client: Client) {
+    protected CheckInput(Client: DSClient) {
         if (Client.Input.Button.Spindash.Activated) {
             if (Client.Flags.SpindashSpeed < 10) {
                 Client.Flags.SpindashSpeed += .4
@@ -58,7 +58,7 @@ export class StateSpindash extends SrcState {
         return CheckRail(Client)
     }
 
-    protected AfterUpdateHook(Client: Client) {
+    protected AfterUpdateHook(Client: DSClient) {
         PhysicsHandler.ApplyGravity(Client)
         PhysicsHandler.Turn(Client, Client.Input.GetTurn(), undefined)
         PhysicsHandler.Skid(Client)
@@ -84,7 +84,7 @@ export class StateRoll extends SrcState {
         super()
     }
 
-    protected CheckInput(Client: Client) {
+    protected CheckInput(Client: DSClient) {
         if (Client.Input.Button.Roll.Pressed || Client.Speed.x < Client.Config.RollGetUp) {
             // TODO: ceil clip
             Client.State.Current = Client.State.States.Grounded
@@ -96,7 +96,7 @@ export class StateRoll extends SrcState {
         return CheckJump(Client) || CheckRail(Client)
     }
 
-    protected AfterUpdateHook(Client: Client) {
+    protected AfterUpdateHook(Client: DSClient) {
         PhysicsHandler.ApplyInertia(Client)
         PhysicsHandler.Turn(Client, Client.Input.GetTurn(), undefined)
 

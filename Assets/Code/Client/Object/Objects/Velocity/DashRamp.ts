@@ -1,12 +1,12 @@
 import _OBJBase from "../Base"
-import Client from "Code/Client/Client"
+import DSClient from "Code/Client/Client"
 
 @AirshipComponentMenu("Object/DashRamp")
 export default class _OBJDashRamp extends _OBJBase {
     public Velocity = 6
     public LockTime = 0
 
-    override OnTouch(Client: Client) {
+    override OnTouch(Client: DSClient) {
         Client.ResetObjectState()
 
         Client.Speed = Client.Speed.WithX(this.Velocity)

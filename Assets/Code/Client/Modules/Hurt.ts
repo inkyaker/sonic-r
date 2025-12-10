@@ -1,4 +1,4 @@
-import Client from "Code/Client/Client"
+import DSClient from "Code/Client/Client"
 import { SrcState } from "./State"
 import { CheckRail } from "./Rail"
 import { PhysicsHandler } from "Code/Client/Physics/Physics"
@@ -12,17 +12,17 @@ export class StateHurt extends SrcState {
         super()
     }
 
-    protected CheckInput(Client: Client) {
+    protected CheckInput(Client: DSClient) {
         return CheckRail(Client)
     }
 
-    protected BeforeUpdateHook(Client: Client) {
+    protected BeforeUpdateHook(Client: DSClient) {
         PhysicsHandler.ApplyInertia(Client)
         PhysicsHandler.AlignToGravity(Client)
         Client.Ground.Grounded = false
     }
 
-    protected AfterUpdateHook(Client: Client) {
+    protected AfterUpdateHook(Client: DSClient) {
         if (Client.Ground.Grounded) {
             Client.State.Current = Client.State.States.Grounded
             Client.Animation.Current = "Land"

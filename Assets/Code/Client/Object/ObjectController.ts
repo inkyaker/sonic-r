@@ -1,5 +1,5 @@
 import { Constants } from "Code/Shared/Components/ConfigSingleton"
-import Client from "../Client"
+import DSClient from "../Client"
 import _OBJBase from "./Objects/Base"
 
 const Objects = new Map<BoxCollider, _OBJBase>()
@@ -7,7 +7,7 @@ const Objects = new Map<BoxCollider, _OBJBase>()
 export class ObjectController {
     private Client
 
-    constructor(Client: Client) {
+    constructor(Client: DSClient) {
         this.Client = Client
     }
 

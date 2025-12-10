@@ -1,6 +1,6 @@
 import { CFrame } from "Code/Shared/Types"
 import _OBJBase from "../Base"
-import Client from "Code/Client/Client"
+import DSClient from "Code/Client/Client"
 import { AnimatedObject, AnimateObject } from "../Implementables"
 import { RegisterObject } from "../../ObjectController"
 
@@ -10,7 +10,7 @@ type Animations = "None" | "Activate"
 export default class _OBJSpring extends _OBJBase implements AnimateObject<Animations> {
     public Animator: Animator
     public Listener: AnimationEventListener
-    public AnimationController: AnimatedObject<Animations> = new AnimatedObject(this)
+    public AnimationController: AnimatedObject<Animations>
 
     public Velocity = new Vector3(0, 2, 0)
     public Wide = false
@@ -18,14 +18,14 @@ export default class _OBJSpring extends _OBJBase implements AnimateObject<Animat
     public DirectVelocity = false
     public LockTime = 0
 
-    override InitObject() {
-        RegisterObject(this)
+    override OnStart() {
+        this.AnimationController = new AnimatedObject(this)
 
         this.HomingTarget = true
         this.HomingWeight = 1
     }
 
-    override OnTouch(Client: Client) {
+    override OnTouch(Client: DSClient) {
         Client.ResetObjectState()
         Client.EnterBall()
 

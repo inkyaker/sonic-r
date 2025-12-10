@@ -1,4 +1,4 @@
-import Client from "../Client";
+import DSClient from "../Client";
 import { Asset } from "@Easy/Core/Shared/Asset";
 import JumpBall from "./Components/JumpBall";
 import SpindashBall from "./Components/SpindashBall";
@@ -30,7 +30,7 @@ export class Renderer {
         SpindashBallPrefab.transform.SetParent(RootTransform)
 
         this.SpindashBall = SpindashBallPrefab.GetAirshipComponent<SpindashBall>()!
-        
+
         for (const [_, Object] of pairs(RigParent.GetComponentsInChildren<Transform>(true)))
             this.Parts.push(Object.gameObject)
     }
@@ -59,13 +59,13 @@ export class Renderer {
         this.SetVisible(CharacterVisible)
     }
 
-    public Destroy() {}
+    public Destroy() { }
 
     public SetVisible(Visible: boolean) {
         if (this.CharacterVisible === Visible) return
         this.CharacterVisible = Visible
 
-        for (const [_, Mesh] of pairs(this.Parts)) 
+        for (const [_, Mesh] of pairs(this.Parts))
             Mesh.SetActive(Visible)
     }
 }

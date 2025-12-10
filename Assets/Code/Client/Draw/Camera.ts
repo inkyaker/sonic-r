@@ -1,4 +1,4 @@
-import Client from "../Client"
+import DSClient from "../Client"
 import { Mouse } from "@Easy/Core/Shared/UserInput"
 import { CFrame } from "Code/Shared/Types"
 import { Airship } from "@Easy/Core/Shared/Airship"
@@ -8,11 +8,15 @@ import { Constants } from "Code/Shared/Components/ConfigSingleton"
 const MouseSensitivity = new Vector2(1, 0.77).mul(math.rad(0.5))
 const PitchMax = 85
 
+function ExponentialVector(Vector: Vector2) {                                                       
+    return Vector.mul(Constants().CameraSensitivityCurve.Evaluate(math.clamp01(Vector.magnitude)))
+}
+
 /**
  * @class
  */
 export class Camera {
-    private Client: Client
+    private Client: DSClient
     public InputChanged: () => void
     public Zoom: number
     public Rotation: { X: number, Y: number, Z: number }
@@ -20,7 +24,7 @@ export class Camera {
     public CameraOffset: Vector3
     public Transform: Transform = GameObject.FindGameObjectWithTag("MainCamera").transform
 
-    constructor(Client: Client) {
+    constructor(Client: DSClient) {
         this.Rotation = { X: 0, Y: 0, Z: 0 }
         this.Zoom = 32
         this.Client = Client
@@ -39,7 +43,8 @@ export class Camera {
      * @returns 
      */
     public Update(Delta: number) {
-        let JoyRight = Vector2.zero
+        let JoyRight = new Vector2(Input.GetAxis("JoyRH"), Input.GetAxis("JoyRV"))
+        JoyRight = ExponentialVector(JoyRight).mul(Delta).mul(10**3).mul(Settings.CameraSensitivityController)
         const MouseDelta = Mouse.GetDelta()
 
         const Scale = this.Client.Config.Scale
@@ -52,9 +57,9 @@ export class Camera {
                 Mouse.IsOverUI() ? false : (Mouse.isRightDown && MouseDelta.magnitude > 0)
 
         if (RotatingCamera) {
-            let CamDelta = MouseDelta
+            let CamDelta = MouseDelta.add(JoyRight)
 
-            const Delta = CamDelta.mul(MouseSensitivity).mul(Airship.Input.GetMouseSensitivity() * 50 * Settings.CameraSensitivity)
+            const Delta = CamDelta.mul(MouseSensitivity).mul(Airship.Input.GetMouseSensitivity() * 50 * Settings.CameraSensitivityMouse)
 
             const PitchMod = -Delta.y
             const YawMod = Delta.x
@@ -88,7 +93,7 @@ export class Camera {
             const Look = FinalCFrame.Position.sub(Origin)
             const Velocity = Look.magnitude
 
-            const [Hit, Position] = Physics.Raycast(Origin, Look.normalized, Velocity, )
+            const [Hit, Position] = Physics.Raycast(Origin, Look.normalized, Velocity,)
 
             if (Hit) {
                 FinalCFrame = new CFrame(Position!.sub(Look.normalized.mul(.1)), FinalCFrame.Rotation)

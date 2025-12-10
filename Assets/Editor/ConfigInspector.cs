@@ -10,6 +10,7 @@ public class ConfigEditor : AirshipEditor
         Tab = AirshipEditorGUI.BeginTabs(Tab, new[]
         {
             new GUIContent("Animation"),
+            new GUIContent("Control"),
             new GUIContent("UI"),
             new GUIContent("Framework"),
             new GUIContent("CharacterInfo")
@@ -21,12 +22,15 @@ public class ConfigEditor : AirshipEditor
                 DrawAnimationTab();
                 break;
             case 1:
-                DrawUITab();
+                DrawControlTab();
                 break;
             case 2:
-                DrawFrameworkTab();
+                DrawUITab();
                 break;
             case 3:
+                DrawFrameworkTab();
+                break;
+            case 4:
                 DrawCharacterInfoTab();
                 break;
         }
@@ -37,7 +41,7 @@ public class ConfigEditor : AirshipEditor
     void DrawAnimationTab()
     {
         AirshipEditorGUI.BeginGroup(new GUIContent("Animation"));
-        PropertyFields("RigAnimationTilt", "HeadTilt", "EyeTilt");
+        PropertyFields("RigAnimationTilt", "HeadTilt", "EyeTilt");                                                              
         AirshipEditorGUI.EndGroup();
 
         AirshipEditorGUI.BeginGroup(new GUIContent("JumpBall"));
@@ -52,6 +56,11 @@ public class ConfigEditor : AirshipEditor
     void DrawUITab()
     {
         PropertyFields("ReticleMaxDistance", "ReticleDistanceCurve", "ReticleTimeMax", "ReticleRotationSpeed");
+    }
+
+    void DrawControlTab()
+    {
+        PropertyFields("CameraSensitivityCurve");                                                                                       
     }
 
     void DrawFrameworkTab()

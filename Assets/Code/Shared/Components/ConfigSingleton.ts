@@ -9,6 +9,9 @@ export default class Config extends AirshipSingleton {
     public JumpBallStretchCurve: AnimationCurve
     public JumpBallRotationSpeed: AnimationCurve
     public SpindashBallRotationSpeed: AnimationCurve
+    
+    // Control
+    public CameraSensitivityCurve: AnimationCurve
 
     // UI
     public ReticleMaxDistance: number = 100

@@ -1,7 +1,7 @@
 import { Camera } from "./Draw/Camera"
 import { Renderer } from "./Draw/Renderer"
 import { StateMachine } from "./StateMachine"
-import { Input } from "./Control/Input"
+import { DSInput } from "./Control/Input"
 import { Animations } from "Code/Shared/Animations"
 import { Animation } from "./Draw/Animation"
 import { ObjectController } from "./Object/ObjectController"
@@ -113,7 +113,7 @@ class HomingAttack {
  * Client
  * @class
  */
-export default class Client extends AirshipBehaviour {
+export default class DSClient extends AirshipBehaviour {
     // Main
     public Controller: Animator
     public RigParent: GameObject
@@ -139,7 +139,7 @@ export default class Client extends AirshipBehaviour {
     public Camera: Camera
     public Animation: Animation
     public Renderer: Renderer
-    public Input: Input
+    public Input: DSInput
     public Object: ObjectController
     public Rail: Rail
     public Sound: SoundController
@@ -171,7 +171,7 @@ export default class Client extends AirshipBehaviour {
             this.Animation = new Animation(this.EventListener, this.RigParent.transform, this.Animations, this.Controller, {} as unknown as DrawInformation)
             this.Camera = new Camera(this)
             this.Renderer = new Renderer(this.transform, this.RigParent)
-            this.Input = new Input(this)
+            this.Input = new DSInput(this)
             this.Object = new ObjectController(this)
             this.Rail = new Rail()
             this.Sound = new SoundController(this)

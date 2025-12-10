@@ -1,4 +1,4 @@
-import Client from "Code/Client/Client"
+import DSClient from "Code/Client/Client"
 import { PhysicsHandler } from "Code/Client/Physics/Physics"
 import { CheckJump } from "./Jump"
 import { CheckSkid } from "./Skid"
@@ -15,11 +15,11 @@ export class StateGrounded extends SrcState {
         super()
     }
 
-    protected CheckInput(Client: Client) {
+    protected CheckInput(Client: DSClient) {
         return CheckJump(Client) || CheckSpindash(Client) || CheckSkid(Client) || CheckRail(Client)
     }
 
-    protected BeforeUpdateHook(Client: Client) {
+    protected BeforeUpdateHook(Client: DSClient) {
         if (Client.Speed.x === 0) {
             PhysicsHandler.RotateWithGravity(Client)
         }
@@ -28,7 +28,7 @@ export class StateGrounded extends SrcState {
         PhysicsHandler.AccelerateGrounded(Client)
     }
 
-    protected AfterUpdateHook(Client: Client) {
+    protected AfterUpdateHook(Client: DSClient) {
         if (Client.Ground.Grounded) {
             const Slip = math.sqrt(1)
             const Acceleration = math.min(math.abs(Client.Speed.x) / Client.Config.CrashSpeed, 1)

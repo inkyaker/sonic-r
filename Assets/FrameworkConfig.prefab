@@ -358,6 +358,24 @@ MonoBehaviour:
       serializedValue: 0,0.1023865,0.2359959,0.2359959,0,0.3250903;0.5895797,0.5613041,2.275908,2.275908,0.102468,0.1066069;1,1,0.3174604,0.3174604,0.5482185,0
       serializedObject: {fileID: 0}
       modified: 1
+    - name: CameraSensitivityCurve
+      type: AnimationCurve
+      objectType: 
+      items:
+        type: 
+        objectType: 
+        serializedItems: []
+        objectRefs: []
+      refPath: 
+      fileRef: 
+      jsDocs:
+        text: []
+        tags: []
+      decorators: []
+      nullable: 0
+      serializedValue: -0.004165649,0,0,0,0,0;0.9958191,1,2.337139,2.337139,0.1171576,0
+      serializedObject: {fileID: 0}
+      modified: 1
     displayIcon: {fileID: 0}
     displayName: 
 --- !u!114 &-2423207015879851009

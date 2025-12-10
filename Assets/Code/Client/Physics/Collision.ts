@@ -1,4 +1,4 @@
-import Client from "../Client";
+import DSClient from "../Client";
 import * as VUtil from "Code/Shared/Common/Utility/VUtil"
 import { Constants } from "Code/Shared/Components/ConfigSingleton";
 import { CFrame } from "Code/Shared/Types";
@@ -8,7 +8,7 @@ import TagCheckSingleton from "Code/Shared/Components/TagCheckSingleton";
 let NoFloorEnabled = false
 task.spawn(() => NoFloorEnabled = TagCheckSingleton.Get().TagExists("NoFloor"))
 
-function GetAligned(Client: Client, Normal: Vector3) {
+function GetAligned(Client: DSClient, Normal: Vector3) {
     if (Client.Angle.mul(Vector3.up).Dot(Normal) < -0.999) {
         return Quaternion.Euler(180, 0, 0).mul(Client.Angle)
     }
@@ -16,7 +16,7 @@ function GetAligned(Client: Client, Normal: Vector3) {
     return Quaternion.FromToRotation(Client.Angle.mul(Vector3.up), Normal).mul(Client.Angle)
 }
 
-function AlignNormal(Client: Client, Normal: Vector3) {
+function AlignNormal(Client: DSClient, Normal: Vector3) {
     Client.Angle = GetAligned(Client, Normal)
 }
 
@@ -29,11 +29,11 @@ function VelCancel(Velocity: Vector3, Normal: Vector3) {
     return Velocity
 }
 
-function LocalVelCancel(Client: Client, vel: Vector3, normal: Vector3) {
+function LocalVelCancel(Client: DSClient, vel: Vector3, normal: Vector3) {
     return Client.ToLocal(VelCancel(Client.ToGlobal(vel), normal.normalized))
 }
 
-function LocalFlatten(Client: Client, vector: Vector3, normal: Vector3) {
+function LocalFlatten(Client: DSClient, vector: Vector3, normal: Vector3) {
     return Client.ToLocal(VUtil.Flatten(Client.ToGlobal(vector), normal.normalized))
 }
 
@@ -49,7 +49,7 @@ function Raycast(From: Vector3, Direction: Vector3) {
 }
 
 //Wall collision
-function WallRay(Client: Client, Y: number, Direction: Vector3, Velocity: number) {
+function WallRay(Client: DSClient, Y: number, Direction: Vector3, Velocity: number) {
     //Raycast
     const ReverseDirection = Direction.mul(Client.Config.Radius * Client.Config.Scale)
     const From = Client.Position.add(Client.Angle.mul(Vector3.up.mul(Y)))
@@ -64,14 +64,14 @@ function WallRay(Client: Client, Y: number, Direction: Vector3, Velocity: number
     return $tuple(undefined, undefined, undefined)
 }
 
-function CheckWallAttach(Client: Client, Direction: Vector3, Normal: Vector3) {
+function CheckWallAttach(Client: DSClient, Direction: Vector3, Normal: Vector3) {
     const DirectionDot = Direction.Dot(Normal)
     const SpeedDot = Client.ToGlobal(Client.Speed).Dot(Normal)
     const UpDot = Client.Angle.mul(Vector3.up).Dot(Normal)
     return (DirectionDot < -0.35 && SpeedDot < -1.16 && UpDot > 0.5)
 }
 
-function WallAttach(Client: Client, InputNormal: Vector3) {
+function WallAttach(Client: DSClient, InputNormal: Vector3) {
     const FUp = Client.Config.Height * Client.Config.Scale
     const FDown = FUp + (Client.Config.PositionError * Client.Config.Scale)
     const [Hit, Position, Normal] = Raycast(Client.Position.add(Client.Angle.mul(Vector3.up).mul(FUp)), InputNormal.mul(-FDown))
@@ -82,11 +82,11 @@ function WallAttach(Client: Client, InputNormal: Vector3) {
     }
 }
 
-function WallHit(Client: Client, Normal: Vector3) {
+function WallHit(Client: DSClient, Normal: Vector3) {
     Client.Speed = LocalVelCancel(Client, Client.Speed, Normal)
 }
 
-function WallCollide(Client: Client, Y: number, Direction: Vector3, Velocity: number, ForwardAttach: boolean, BackAttach: boolean) {
+function WallCollide(Client: DSClient, Y: number, Direction: Vector3, Velocity: number, ForwardAttach: boolean, BackAttach: boolean) {
     //Positive and negative wall collision
     let [ForwardPos, ForwardNormal] = WallRay(Client, Y, Direction, math.max(Velocity, 0))
     let [BackwardPos, BackwardNormal] = WallRay(Client, Y, Direction.mul(-1), math.max(-Velocity, 0))
@@ -133,7 +133,7 @@ function WallCollide(Client: Client, Y: number, Direction: Vector3, Velocity: nu
  * Run global collision for `Client`
  * @param Client
  */
-export function RunCollision(Client: Client) {
+export function RunCollision(Client: DSClient) {
     //Stick to moving floors
     if (Client.Ground.Grounded && Client.Ground.Floor) {
         const Current = CFrame.FromTransform(Client.Ground.Floor)

@@ -1,6 +1,8 @@
+import { InputAction } from "@Easy/Core/Shared/Input/InputAction"
 import { RegisterObject } from "../ObjectController"
 import { Bin } from "@Easy/Core/Shared/Util/Bin"
-import Client from "Code/Client/Client"
+import DSClient from "Code/Client/Client"
+import { Airship } from "@Easy/Core/Shared/Airship"
 
 export default class _OBJBase extends AirshipBehaviour {
     @NonSerialized() public Collider = this.gameObject.GetComponent<BoxCollider>()!
@@ -18,11 +20,16 @@ export default class _OBJBase extends AirshipBehaviour {
         }
     }
 
+
+    public OnStart() {}
+
     public InitObject() {
+        this.OnStart()
+
         RegisterObject(this)
     }
 
-    protected OnTick(GetClient: () => Client) {
+    protected OnTick(GetClient: () => DSClient) {
         if (this.Debounce > 0) {
             this.Debounce--
         }
@@ -32,7 +39,7 @@ export default class _OBJBase extends AirshipBehaviour {
      * Client touched callback
      * @param Client
      */
-    protected OnTouch(Client: Client) { }
+    protected OnTouch(Client: DSClient) { }
 
     /**
      * .RenderStepped callback
@@ -42,11 +49,11 @@ export default class _OBJBase extends AirshipBehaviour {
 
     protected OnRespawn() { }
 
-    public Tick(GetClient: () => Client) {
+    public Tick(GetClient: () => DSClient) {
         this.OnTick(GetClient)
     }
 
-    public TouchClient(Client: Client) {
+    public TouchClient(Client: DSClient) {
         if (this.Debounce > 0) { return }
 
         this.OnTouch(Client)
@@ -56,7 +63,11 @@ export default class _OBJBase extends AirshipBehaviour {
         this.PreRender(DeltaTime)
 
         if (this.meta.AnimationLoader) {
-            (this as unknown as { AnimationController: { Animate: (this: unknown) => void } }).AnimationController.Animate()
+            (this as unknown as {
+                AnimationController: {
+                    Animate: (_: _OBJBase) => void
+                }
+            }).AnimationController.Animate(this)
         }
     }
 

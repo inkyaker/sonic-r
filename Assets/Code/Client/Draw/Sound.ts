@@ -1,6 +1,6 @@
 import { Asset } from "@Easy/Core/Shared/Asset";
 import { StateList } from "Code/Client/States";
-import Client from "../Client";
+import DSClient from "../Client";
 import SoundDataComponent from "Code/Shared/Components/SoundDataComponent";
 import { Settings } from "Code/Shared/Settings";
 import UI from "../UI";
@@ -32,11 +32,11 @@ type StopConfig = {
 }
 
 export class SoundController {
-    public Client: Client
+    public Client: DSClient
     public Assets = []
     public Registry: GameObject[] = []
 
-    constructor(Client: Client) {
+    constructor(Client: DSClient) {
         this.Client = Client
 
         UI.Get().CurrentSound = this

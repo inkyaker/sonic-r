@@ -1,5 +1,5 @@
 import { Bin } from "@Easy/Core/Shared/Util/Bin";
-import Client from "./Client";
+import DSClient from "./Client";
 import { Network } from "Code/Shared/Network";
 import { Renderer } from "./Draw/Renderer";
 import { DrawInformation } from "Code/Shared/Types";
@@ -7,7 +7,7 @@ import { Animation } from "./Draw/Animation";
 
 export default class ClientReplicator extends AirshipBehaviour {
     public Connections = new Bin()
-    public Client: Client
+    public Client: DSClient
     public Net: NetworkIdentity
 
     @NonSerialized() public Draw: Renderer
@@ -28,7 +28,7 @@ export default class ClientReplicator extends AirshipBehaviour {
 
             this.Draw = new Renderer(this.Client.transform, this.Client.RigParent)
             this.Animation = new Animation(this.Client.EventListener, this.Client.RigParent.transform, this.Client.Animations, this.Client.Controller, {} as unknown as DrawInformation)
-        
+
             return
         }
 
@@ -57,7 +57,7 @@ export default class ClientReplicator extends AirshipBehaviour {
                 Network.Replication.ChangedPacket.client.FireServer(this.Changed)
                 this.Changed.clear()
             }
-            
+
             return
         }
 

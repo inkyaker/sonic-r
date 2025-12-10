@@ -1,4 +1,4 @@
-import Client from "Code/Client/Client"
+import DSClient from "Code/Client/Client"
 
 /**
  * Function ran in `State.CheckInput`
@@ -6,7 +6,7 @@ import Client from "Code/Client/Client"
  * @param Client 
  * @returns Move successful
  */
-export function CheckJump(Client: Client) {
+export function CheckJump(Client: DSClient) {
     if (Client.Input.Button.Jump.Pressed) {
         Client.State.Current = Client.State.States.Airborne
 

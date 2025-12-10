@@ -238,7 +238,7 @@ export class Animation {
     }
 
     public DynamicTilt(DeltaTime: number) {
-        const NewTilt = this.Turn >= math.rad(135) ? 0 : math.clamp(this.Turn, math.rad(-80), math.rad(80))
+        const NewTilt = this.Turn >= math.rad(120) ? 0 : math.clamp(this.Turn, math.rad(-80), math.rad(80))
 
         for (const [_, Tilt] of pairs(this.Tilts)) {
             Tilt.Update(DeltaTime, math.deg(NewTilt))

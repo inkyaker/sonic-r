@@ -1,3 +1,4 @@
+import { InputUtil } from "@Easy/Core/Shared/Input/InputUtil"
 import _OBJBase from "./Base"
 
 export interface AnimateObject<States extends string> {

@@ -1,4 +1,4 @@
-import Client from "Code/Client/Client"
+import DSClient from "Code/Client/Client"
 import { PhysicsHandler } from "Code/Client/Physics/Physics"
 import { CheckBounce } from "./Bounce"
 import { CheckHomingAttack } from "./Homing"
@@ -14,11 +14,11 @@ export class StateAirborne extends SrcState {
         super()
     }
 
-    protected CheckInput(Client: Client) {
+    protected CheckInput(Client: DSClient) {
         return CheckHomingAttack(Client) || CheckBounce(Client) || CheckRail(Client)
     }
 
-    protected BeforeUpdateHook(Client: Client) {
+    protected BeforeUpdateHook(Client: DSClient) {
         if (Client.Animation.Current === "Spring" && Client.Speed.y <= .5) {
             Client.Animation.Current = "Fall"
         }
@@ -31,7 +31,7 @@ export class StateAirborne extends SrcState {
         PhysicsHandler.AccelerateAirborne(Client)
     }
 
-    protected AfterUpdateHook(Client: Client) {
+    protected AfterUpdateHook(Client: DSClient) {
         if (Client.Ground.Grounded) {
             if (Client.Flags.InBounce) {
                 Client.Flags.JumpTimer = 0
@@ -43,7 +43,7 @@ export class StateAirborne extends SrcState {
 
                 Client.Flags.InBounce = false
                 Client.Sound.Play("Character/BounceLand.wav")
-                
+
                 Client.Flags.HomingTriggered = false
             } else {
                 Client.Sound.Play("Character/Land.wav")

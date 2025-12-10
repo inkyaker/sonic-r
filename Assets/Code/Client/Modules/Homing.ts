@@ -1,4 +1,4 @@
-import Client from "Code/Client/Client"
+import DSClient from "Code/Client/Client"
 import { PhysicsHandler } from "../Physics/Physics"
 import { SrcState } from "./State"
 import { CheckBounce } from "./Bounce"
@@ -12,7 +12,7 @@ import UI from "../UI"
  * @param Client 
  * @returns Move successful
  */
-export function CheckHomingAttack(Client: Client) {
+export function CheckHomingAttack(Client: DSClient) {
     const Object = PhysicsHandler.GetHomingObject(Client)
     UI.Get().SetHomingTarget(Object?.transform)
 
@@ -58,11 +58,11 @@ export class StateHoming extends SrcState {
         super()
     }
 
-    protected CheckInput(Client: Client) {
+    protected CheckInput(Client: DSClient) {
         return CheckBounce(Client)
     }
 
-    protected BeforeUpdateHook(Client: Client) {
+    protected BeforeUpdateHook(Client: DSClient) {
         Client.Angle = CFrame.FromRotationBetweenVectors(Client.Angle.mul(Vector3.up), Vector3.up).mul(Client.Angle)
 
         const Collider = Client.HomingAttack.Target!.Collider
@@ -79,7 +79,7 @@ export class StateHoming extends SrcState {
 
         const ObjectPos = new CFrame(Client.Position, Client.Angle).Inverse().mul(Center)
         const ObjectPosSpeed = new CFrame(Client.Position.add(Client.ToGlobal(Client.Speed.mul(Client.Config.Scale))), Client.Angle).Inverse().mul(Center)
-        
+
         // Speed
         const Speed = Client.HomingAttack.Speed * (Client.HomingAttack.Timer >= 180 ? (.7 + math.random() * .1) : 1)
 
@@ -109,7 +109,7 @@ export class StateHoming extends SrcState {
         }
     }
 
-    protected AfterUpdateHook(Client: Client) {
+    protected AfterUpdateHook(Client: DSClient) {
 
     }
 }

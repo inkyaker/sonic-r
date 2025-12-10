@@ -1,4 +1,4 @@
-import Client from "Code/Client/Client"
+import DSClient from "Code/Client/Client"
 import { RunCollision } from "Code/Client/Physics/Collision"
 
 /**
@@ -17,7 +17,7 @@ export class SrcState {
      * Follows same rules as State.CheckInput
      * @param Client
      */
-    public CheckMoves(Client: Client) {
+    public CheckMoves(Client: DSClient) {
         // Default input checking code
 
         // Per state code
@@ -28,7 +28,7 @@ export class SrcState {
      * Public abstracted method for updating player via BeforeUpdateHook and AfterUpdateHook
      * @param Client Client
      */
-    public Tick(Client: Client) {
+    public Tick(Client: DSClient) {
         // Pre update
         if (this.BeforeUpdateHook(Client) !== undefined) { return }
 
@@ -55,7 +55,7 @@ export class SrcState {
      * Runs every tick after state update
      * @param Client 
      */
-    public Step(Client: Client) {
+    public Step(Client: DSClient) {
         this.OnStep(Client)
     }
 
@@ -65,7 +65,7 @@ export class SrcState {
      * States can be changed in this method, and the new state will be Ticked
      * @param Client Client
      */
-    protected CheckInput(Client: Client) {
+    protected CheckInput(Client: DSClient) {
     }
 
     /**
@@ -75,7 +75,7 @@ export class SrcState {
      * @param Client Client
      * @returns {true|undefined} If returned true will cancel the tick, skipping Collision, AfterUpdateHook, and Animate
      */
-    protected BeforeUpdateHook(Client: Client): boolean | undefined | void {
+    protected BeforeUpdateHook(Client: DSClient): boolean | undefined | void {
     }
 
     /**
@@ -84,9 +84,9 @@ export class SrcState {
      * Runs after the global update (Collision) and BeforeUpdateHook
      * @param Client Client
      */
-    protected AfterUpdateHook(Client: Client) {
+    protected AfterUpdateHook(Client: DSClient) {
     }
 
-    protected OnStep(Client: Client) {
+    protected OnStep(Client: DSClient) {
     }
 }

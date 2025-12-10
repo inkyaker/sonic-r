@@ -1,4 +1,4 @@
-import Client from "Code/Client/Client"
+import DSClient from "Code/Client/Client"
 import { SrcState } from "./State"
 
 /**
@@ -12,11 +12,11 @@ export class StateNone extends SrcState {
         super()
     }
 
-    protected CheckInput(Client: Client) {
+    protected CheckInput(Client: DSClient) {
         return true
     }
 
-    protected BeforeUpdateHook(Client: Client) {
+    protected BeforeUpdateHook(Client: DSClient) {
         return true
     }
 }

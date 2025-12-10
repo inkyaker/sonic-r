@@ -1,4 +1,4 @@
-import Client from "./Client"
+import DSClient from "./Client"
 import { StateList } from "./States"
 import { SrcState } from "./Modules/State"
 import { CFrame } from "Code/Shared/Types"
@@ -10,12 +10,12 @@ import { MovingPlatforms } from "Code/Shared/Components/MovingPlatform"
  * @class
  */
 export class StateMachine {
-    private Client: Client
+    private Client: DSClient
     public TickTimer: number
     public States: StateList
     public Current: SrcState
 
-    constructor(Client: Client) {
+    constructor(Client: DSClient) {
         this.States = new StateList
 
         this.TickTimer = os.clock()

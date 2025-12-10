@@ -1,17 +1,17 @@
 import _OBJBase from "../Base"
-import Client from "Code/Client/Client"
+import DSClient from "Code/Client/Client"
 
 @AirshipComponentMenu("Object/DashPanel")
 export default class _OBJDashPanel extends _OBJBase {
     public Velocity = 6
     public LockTime = 0
 
-    override Inject() {
+    override OnStart() {
         this.HomingWeight = -2
         this.HomingTarget = true
     }
 
-    override OnTouch(Client: Client) {
+    override OnTouch(Client: DSClient) {
         Client.ResetObjectState()
 
         Client.Speed = Client.Speed.WithX(this.Velocity)
