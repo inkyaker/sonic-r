@@ -9,7 +9,7 @@ export default class SpindashBall extends AirshipBehaviour {
     public RPM = 300
     private RPS = 360 * (this.RPM / 60)
 
-    private YRotation = new SingleDimensionSpring(0, 0, 0, 90, 2, .985, true)
+    private YRotation = new SingleDimensionSpring(0, 0, 0, 90, 2, .96, true)
     private Stretch = new SingleDimensionSpring(0, 0, 0, 1.5, 2, .98)
 
     override Start() {
