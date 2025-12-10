@@ -97,14 +97,14 @@ export const Animations = {
 			Name: "Jog",
 			Position: 0,
 			Speed: {
-				Base: 0,
-				Increment: 1,
+				Base: .25,
+				Increment: 1.15,
 				Absolute: false
 			}
 		},
 		[1]: {
 			Name: "Run",
-			Position: 2.65,
+			Position: 3.5,
 			Speed: {
 				Base: 0,
 				Increment: 1,
@@ -113,7 +113,7 @@ export const Animations = {
 		},
 		[2]: {
 			Name: "Jet",
-			Position: 5,
+			Position: 6,
 			Speed: {
 				Base: 0,
 				Increment: 1,

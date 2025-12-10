@@ -73,7 +73,7 @@ public class ConfigEditor : AirshipEditor
     {
         PropertyField("Character");
         AirshipEditorGUI.BeginGroup(new GUIContent("Character Properties"));
-
+        
         var Character = serializedObject.targetObject.GameObject().GetAirshipComponent(AirshipType.GetType("Character"));
         if (Character)
         {

@@ -155,7 +155,7 @@ MonoBehaviour:
       nullable: 0
       serializedValue: 60
       serializedObject: {fileID: 0}
-      modified: 0
+      modified: 1
     - name: CollisionLayer
       type: string
       objectType: 
@@ -420,7 +420,7 @@ MonoBehaviour:
       nullable: 0
       serializedValue: 5
       serializedObject: {fileID: 0}
-      modified: 0
+      modified: 1
     - name: Scale
       type: number
       objectType: 

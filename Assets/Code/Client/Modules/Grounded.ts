@@ -11,6 +11,8 @@ import { CheckRail } from "./Rail"
  * @augments SrcState
  */
 export class StateGrounded extends SrcState {
+    private LockedAnimations = new Set(["LandMoving", "Land"])
+
     constructor() {
         super()
     }
@@ -34,7 +36,7 @@ export class StateGrounded extends SrcState {
             const Acceleration = math.min(math.abs(Client.Speed.x) / Client.Config.CrashSpeed, 1)
 
             const IdleCheck = math.abs(Client.Speed.x) <= 0 ? (!Client.Animation.Current.find("Idle")[0] && !Client.Animation.Current.find("Land")[0]) : true
-            if (Client.Animation.Current !== "LandMoving" && IdleCheck) {
+            if (!this.LockedAnimations.has(Client.Animation.Current) && IdleCheck) {
                 Client.Animation.Current = math.abs(Client.Speed.x) > 0 && "Run" || "Idle"
             }
             Client.Animation.Speed = Client.Animation.Current === "Run" && math.lerp(Client.Speed.x / Slip + (1 - Slip) * 2, Client.Speed.x, Acceleration) || 1

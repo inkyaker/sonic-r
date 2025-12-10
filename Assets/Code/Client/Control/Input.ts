@@ -27,7 +27,7 @@ export const ControllerMap = {
  */
 export class DSInput {
     public Button
-    public PlatformContext: string
+    public PlatformContext: "KBJS"|"Touch"
     public Stick
     private Client: DSClient
 
@@ -42,7 +42,7 @@ export class DSInput {
             Debug: new ButtonState([Key.Digit1], [ControllerMap.LB])
         }
 
-        this.PlatformContext = "PC"
+        this.PlatformContext = "KBJS"
         this.Stick = Vector2.zero
     }
 
@@ -121,7 +121,11 @@ export class DSInput {
         }
 
         // Stick
-        this.Stick = new Vector2(Input.GetAxis("HorizontalKB"), Input.GetAxis("VerticalKB")).add(new Vector2(Input.GetAxis("HorizontalJS"), -Input.GetAxis("VerticalJS")))
+        if (this.PlatformContext === "KBJS") {
+            this.Stick = new Vector2(Input.GetAxis("HorizontalKB"), Input.GetAxis("VerticalKB")).add(new Vector2(Input.GetAxis("HorizontalJS"), -Input.GetAxis("VerticalJS")))
+        } else {
+
+        }
 
         if (this.Stick.magnitude > 1) { this.Stick = this.Stick.normalized }
 

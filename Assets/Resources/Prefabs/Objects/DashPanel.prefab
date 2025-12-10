@@ -205,7 +205,7 @@ MonoBehaviour:
       nullable: 0
       serializedValue: 6
       serializedObject: {fileID: 0}
-      modified: 0
+      modified: 1
     - name: LockTime
       type: number
       objectType: 
