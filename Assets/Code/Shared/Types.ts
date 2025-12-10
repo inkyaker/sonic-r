@@ -79,14 +79,17 @@ export class CFrame {
         return new CFrame(this.Position.Lerp(Other.Position, Alpha), Quaternion.Slerp(this.Rotation, Other.Rotation, Alpha))
     }
 
-    public static Angles(rx: number, ry: number, rz: number) {
-        const qx = Quaternion.AngleAxis(rx * (180 / math.pi), Vector3.right);
-        const qy = Quaternion.AngleAxis(ry * (180 / math.pi), Vector3.up);
-        const qz = Quaternion.AngleAxis(rz * (180 / math.pi), Vector3.forward);
+    /**
+     * Converts X, Y, Z in radians to a cframe using ZYX rotation order
+     */
+    public static Angles(RX: number, RY: number, RZ: number) {
+        const X = Quaternion.AngleAxis(RX * (180 / math.pi), Vector3.right);
+        const Y = Quaternion.AngleAxis(RY * (180 / math.pi), Vector3.up);
+        const Z = Quaternion.AngleAxis(RZ * (180 / math.pi), Vector3.forward);
 
-        const rotation = qz.mul(qy).mul(qx);
+        const Rotation = Z.mul(Y).mul(X);
 
-        return new CFrame(Vector3.zero, rotation);
+        return new CFrame(Vector3.zero, Rotation);
     }
 
     public ToOrientation() {
