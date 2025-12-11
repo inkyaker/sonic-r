@@ -40,7 +40,7 @@ export class StateGrounded extends SrcState {
             const Slip = math.sqrt(1)
             const Acceleration = math.min(math.abs(Client.Speed.x) / Client.Config.CrashSpeed, 1)
 
-            const IdleCheck = math.abs(Client.Speed.x) <= 0 ? (!Client.Animation.Current.find("Idle")[0] && !Client.Animation.Current.find("Land")[0]) : true
+            const IdleCheck = math.abs(Client.Speed.x) <= .1 ? (!Client.Animation.Current.find("Idle")[0] && !Client.Animation.Current.find("Land")[0]) : true
             if (!this.LockedAnimations.has(Client.Animation.Current) && IdleCheck) {
                 Client.Animation.Current = math.abs(Client.Speed.x) > 0 && "Run" || "Idle"
             }
