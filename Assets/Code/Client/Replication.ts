@@ -12,6 +12,9 @@ export default class ClientReplicator extends AirshipBehaviour {
     public Client: DSClient
     public Net: NetworkIdentity
 
+    public Position: Vector3
+    public Rotation: Quaternion
+
     @NonSerialized() public Draw: Renderer
     @NonSerialized() public Animation: Animation
     @NonSerialized() public IsHost: boolean
@@ -21,8 +24,6 @@ export default class ClientReplicator extends AirshipBehaviour {
     override Start() {
         this.IsHost = this.Client.Player === Game.localPlayer
         this.Link = Framework.Get().Links.get(this.Client.Player)!
-
-        print(`Starting replication for ${this.Client.Player.username} as ${this.IsHost ? "Host" : "Peer"}.`)
 
         if (!this.IsHost) {
             this.Draw = new Renderer(this.Client.transform, this.Client.RigParent)
@@ -37,7 +38,7 @@ export default class ClientReplicator extends AirshipBehaviour {
     }
 
     override LateUpdate(DeltaTime: number) {
-        // host only sends data
+        // Host only sends data
         if (this.IsHost) {
             const DrawInfo = this.Client.RenderInfo
 
@@ -52,7 +53,7 @@ export default class ClientReplicator extends AirshipBehaviour {
             return
         }
 
-        // client does drawing work
+        // Client does drawing work
         this.Animation.DrawInfo = this.Link.Data
         this.Animation.Speed = this.Link.Data.AnimationSpeed
         this.Animation.Current = this.Link.Data.Animation
