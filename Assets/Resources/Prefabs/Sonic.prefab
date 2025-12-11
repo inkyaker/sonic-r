@@ -10,7 +10,6 @@ GameObject:
   m_Component:
   - component: {fileID: 7700269927733095248}
   - component: {fileID: 6574369350419088516}
-  - component: {fileID: -3723264410397600098}
   - component: {fileID: 8447416595872292241}
   - component: {fileID: 6397337795351082585}
   - component: {fileID: 4808008690286552953}
@@ -59,23 +58,6 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
---- !u!114 &-3723264410397600098
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7032100471684149738}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9b91ecbcc199f4492b9a91e820070131, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  sceneId: 0
-  _assetId: 2959851782
-  serverOnly: 0
-  visibility: 0
-  hasSpawned: 0
 --- !u!114 &8447416595872292241
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -106,7 +88,7 @@ MonoBehaviour:
   scriptPath: Assets/Code/Client/Client.lua
   forceContext: 0
   metadata:
-    name: Client
+    name: DSClient
     singleton: 0
     decorators: []
     properties:
@@ -164,24 +146,6 @@ MonoBehaviour:
       serializedValue: 
       serializedObject: {fileID: 6739859718068227842}
       modified: 1
-    - name: Config
-      type: AirshipBehaviour
-      objectType: Character
-      items:
-        type: 
-        objectType: 
-        serializedItems: []
-        objectRefs: []
-      refPath: 
-      fileRef: Code/Shared/Components/CharacterSingleton.ts
-      jsDocs:
-        text: []
-        tags: []
-      decorators: []
-      nullable: 0
-      serializedValue: 
-      serializedObject: {fileID: 0}
-      modified: 0
     displayIcon: {fileID: 0}
     displayName: 
 --- !u!114 &4808008690286552953
@@ -239,7 +203,7 @@ MonoBehaviour:
       decorators: []
       nullable: 0
       serializedValue: 
-      serializedObject: {fileID: -3723264410397600098}
+      serializedObject: {fileID: 0}
       modified: 1
     displayIcon: {fileID: 0}
     displayName: 

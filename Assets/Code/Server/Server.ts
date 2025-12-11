@@ -1,66 +1,48 @@
 import { Airship } from "@Easy/Core/Shared/Airship";
-import { Asset } from "@Easy/Core/Shared/Asset";
 import { Player } from "@Easy/Core/Shared/Player/Player";
-import { NetworkUtil } from "@Easy/Core/Shared/Util/NetworkUtil";
+import Link from "@inkyaker/DualLink/Code";
 import { Network } from "Code/Shared/Network";
+import { DrawInformation, GetRenderInfo } from "Code/Shared/Types";
 
-export default class Spawner extends AirshipSingleton {
-    public Characters = new Map<Player, number>()
-
-    public SpawnCharacter(Player: Player) {
-        if (Player.userId === "loading")
-            while (Player.userId === "loading") task.wait()
-
-        const Character = Instantiate(Asset.LoadAsset("Assets/Resources/Prefabs/Sonic.prefab"), this.transform.position, this.transform.rotation)
-        NetworkServer.Spawn(Character, Player.networkIdentity.connectionToClient as unknown as NetworkConnection)
-
-        const Identity = Character.GetComponent<NetworkIdentity>()!
-        Network.EnableClient.server.FireAllClients(Identity.netId, Player.userId)
-
-        this.Characters.set(Player, Identity.netId)
-    }
-
-    public DestroyCharacter(Player: Player) {
-        const ID = this.Characters.get(Player)
-        
-        if (ID) {
-            const Model = NetworkUtil.GetNetworkIdentity(ID)
-            
-            if (Model) {
-                Destroy(Model.gameObject)
-                NetworkServer.Destroy(Model.gameObject)
-            }
-        }
-
-        this.Characters.delete(Player)
-    }
+export default class DSServer extends AirshipSingleton {
+    public Links = new Map<Player, Link<DrawInformation>>()
 
     @Server()
     override Start() {
-        // Fired when players join the game
-        Airship.Players.ObservePlayers((Player) => this.SpawnCharacter(Player));
+        Airship.Players.ObservePlayers((Player) => {
+            const Data = new Link(`ReplicationData@${Player.userId}`, GetRenderInfo(), {
+                AllowUpdateFrom: [Player],
+            })
 
-        Airship.Players.onPlayerDisconnected.Connect((Player) => this.DestroyCharacter(Player))
+            this.Links.set(Player, Data)
 
-        Network.Respawn.server.OnClientEvent((Player) => {
-            this.DestroyCharacter(Player)
-            this.SpawnCharacter(Player)
-        })
-
-        Network.Replication.ChangedPacket.server.OnClientEvent((Player, Changes) => {
-            const Character = this.Characters.get(Player)
-
-            if (Character) {
-                Network.Replication.ChangedPacket.server.FireExcept(Player, Changes, Character)
+            return () => {
+                this.Links.delete(Player)
+                Data.Destroy()
             }
         })
 
-        Network.Replication.InitialPacket.server.OnClientEvent((Player, Changes) => {
-            const Character = this.Characters.get(Player)
+        Network.Replication.GetInitialLinkData.server.SetCallback((Player, ID) => {
+            const TargetPlayer = Airship.Players.FindByUserId(ID)!
 
-            if (Character) {
-                Network.Replication.InitialPacket.server.FireExcept(Player, Changes, Character)
+            if (Player) {
+                let Data
+                while (!Data) {
+                    Data = this.Links.get(TargetPlayer)
+                    if (!Data) task.wait()
+                }
+
+                return Data.Data
             }
+
+            error(`Player not in the server!`)
         })
+    }
+
+    @Server()
+    override LateUpdate() {
+        for (const [_, Link] of pairs(this.Links)) {
+            Link.PrepareReplicate()
+        }
     }
 }

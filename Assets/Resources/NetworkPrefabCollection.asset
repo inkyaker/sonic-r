@@ -12,5 +12,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 48811be2299a41a0b92451957a82d5b9, type: 3}
   m_Name: NetworkPrefabCollection
   m_EditorClassIdentifier: 
-  networkPrefabs:
-  - {fileID: 7032100471684149738, guid: a9ce5a9147a29d243937bb5f0ceb3adb, type: 3}
+  networkPrefabs: []

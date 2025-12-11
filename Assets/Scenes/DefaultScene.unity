@@ -3246,6 +3246,7 @@ GameObject:
   m_Component:
   - component: {fileID: 791998773}
   - component: {fileID: 791998772}
+  - component: {fileID: 791998774}
   m_Layer: 0
   m_Name: Framework
   m_TagString: Untagged
@@ -3291,6 +3292,29 @@ Transform:
   m_Children: []
   m_Father: {fileID: 346118019}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &791998774
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 791998771}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fa4feffba88dce746a2607f0ec6233b4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  guid: cc1b5dfe-01a0-4125-b455-d4ca1b97766c
+  script: {fileID: -5168604584691490730, guid: b6fdf4230bebf9547bca047e44fbd143, type: 3}
+  scriptPath: Assets/Code/Server/Server.lua
+  forceContext: 0
+  metadata:
+    name: DSServer
+    singleton: 0
+    decorators: []
+    properties: []
+    displayIcon: {fileID: 0}
+    displayName: 
 --- !u!1 &805755346 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 4767400413853537203, guid: 3b8d165dfba906d41a6c7d9cfc6719ad, type: 3}
@@ -4399,12 +4423,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fa4feffba88dce746a2607f0ec6233b4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  guid: 17d1f98f-cdfe-42d8-9964-e55421705886
-  script: {fileID: -5168604584691490730, guid: b6fdf4230bebf9547bca047e44fbd143, type: 3}
-  scriptPath: Assets/Code/Server/Server.lua
+  guid: bf6284e1-a6eb-4baa-8e1a-3df5083b5f90
+  script: {fileID: 5841734942422344104, guid: e04854a2be1ff1140af6b12b4a525404, type: 3}
+  scriptPath: Assets/Code/Shared/Components/CharacterLoader.lua
   forceContext: 0
   metadata:
-    name: Spawner
+    name: CharacterLoader
     singleton: 0
     decorators: []
     properties: []
@@ -4910,10 +4934,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 532500593}
     m_Modifications:
-    - target: {fileID: -3723264410397600098, guid: a9ce5a9147a29d243937bb5f0ceb3adb, type: 3}
-      propertyPath: sceneId
-      value: 2199559660
-      objectReference: {fileID: 0}
     - target: {fileID: 3933870702036701969, guid: a9ce5a9147a29d243937bb5f0ceb3adb, type: 3}
       propertyPath: m_LocalRotation.w
       value: 0.7071068
@@ -4942,9 +4962,13 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4808008690286552953, guid: a9ce5a9147a29d243937bb5f0ceb3adb, type: 3}
+      propertyPath: metadata.properties.Array.data[1].serializedObject
+      value: 
+      objectReference: {fileID: 0}
     - target: {fileID: 6397337795351082585, guid: a9ce5a9147a29d243937bb5f0ceb3adb, type: 3}
       propertyPath: metadata.properties.Array.size
-      value: 4
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 6397337795351082585, guid: a9ce5a9147a29d243937bb5f0ceb3adb, type: 3}
       propertyPath: metadata.properties.Array.data[0].name
@@ -5054,7 +5078,9 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 4808008690286552953, guid: a9ce5a9147a29d243937bb5f0ceb3adb, type: 3}
+    - {fileID: 6397337795351082585, guid: a9ce5a9147a29d243937bb5f0ceb3adb, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []

@@ -1,3 +1,7 @@
+import DSClient from "Code/Client/Client"
+import { Constants } from "./Components/ConfigSingleton"
+import { ValidAnimation } from "./Animations"
+
 export class CFrame {
     public readonly Position: Vector3
     public readonly Rotation: Quaternion
@@ -27,11 +31,11 @@ export class CFrame {
 
         if (Dot <= -0.999999) {
             let Axis = Vector3.Cross(Vector3.right, Startn)
-            
+
             if (Axis.magnitude < 0.001) {
                 Axis = Vector3.Cross(Vector3.up, Startn)
             }
-            
+
             Axis = Axis.normalized
 
             return new CFrame(Vector3.zero, new Quaternion(Axis.x, Axis.y, Axis.z, 0))
@@ -49,12 +53,12 @@ export class CFrame {
             const Rotation = this.Rotation.mul(Other.Rotation)
             const Inverse = Quaternion.Inverse(this.Rotation)
             const Addition = this.Rotation.mul(new Quaternion(Other.Position.x, Other.Position.y, Other.Position.z, 0)).mul(Inverse)
-            
+
             const Position = this.Position.add(new Vector3(Addition.x, Addition.y, Addition.z))
             return new CFrame(Position, Rotation) as T extends CFrame ? CFrame : T extends Quaternion ? Quaternion : Vector3
         } else if (typeOf(Other) === "Quaternion") {
             const Rotation = this.Rotation.mul(Other)
-            
+
             return Rotation as T extends CFrame ? CFrame : T extends Quaternion ? Quaternion : Vector3
         } else
             return this.Position.add(this.Rotation.mul(Other as Vector3)) as T extends CFrame ? CFrame : T extends Quaternion ? Quaternion : Vector3
@@ -94,7 +98,7 @@ export class CFrame {
 
     public ToOrientation() {
         const q = this.Rotation;
-        
+
         const R10 = 2 * (q.x * q.y + q.z * q.w);
         const R11 = 1 - 2 * (q.x * q.x + q.z * q.z);
         const R12 = 2 * (q.y * q.z - q.x * q.w);
@@ -127,24 +131,52 @@ export function ToFloat3(Input: Vector3) {
 export interface DrawInformation {
     Position: Vector3
     Rotation: Quaternion
-    
+
     // Rail
     RailOffset: Vector3
     RailBalance: number
-    
+
     // JumpBall
     JumpBall: boolean
     AnimationRate: number
     JumpBallHeight: number
     JumpBallStretch: number
     JumpBallSpeed: number
-    
+
     // SpindashBall
     SpindashBall: boolean
     SpindashSpeed: number
 
     // Animation
-    Animation: string
+    Animation: ValidAnimation
     AnimationSpeed: number
     Speed: Vector3
+}
+
+export function GetRenderInfo<T extends DSClient>(Client?: T) {
+    const i = Client === undefined
+    const JumpBall = i ? false : Client.Flags.BallEnabled && Client.Animation.Current === "Roll"
+    const SpindashBall = i ? false : Client.Flags.BallEnabled && Client.Animation.Current === "Spindash"
+    const AnimationRate = i ? 0 : Client.Animation.GetRate()
+
+    return {
+        Speed: i ? Vector3.zero : Client.Speed,
+
+        RailOffset: i ? Vector3.zero : Client.Rail.RailOffset,
+        RailBalance: i ? 0 : Client.Rail.RailBalance,
+        Position: i ? Vector3.zero : Client.RenderCFrame.Position,
+        Rotation: i ? Quaternion.identity : Client.RenderCFrame.Rotation,
+        JumpBall: JumpBall,
+        SpindashBall: SpindashBall,
+
+        AnimationRate: AnimationRate,
+        JumpBallHeight: i ? 0 : Client.Ground.Grounded ? Client.Config.JumpBallHeightRoll : Client.Config.JumpBallHeightAir,
+        JumpBallStretch: i ? 0 : Constants().JumpBallStretchCurve.Evaluate(Client.Flags.JumpStretchTimer / Client.Config.JumpStretchTimer) * Client.Config.JumpBallStretch,
+        JumpBallSpeed: i ? 0 : Constants().JumpBallRotationSpeed.Evaluate(math.clamp01(AnimationRate / 20)),
+
+        SpindashSpeed: i ? 0 : Constants().SpindashBallRotationSpeed.Evaluate(math.clamp01(Client.Flags.SpindashSpeed / 10) + .15),
+
+        Animation: i ? "Idle" : Client.Animation.Current,
+        AnimationSpeed: i ? 0 : Client.Animation.Speed,
+    }
 }

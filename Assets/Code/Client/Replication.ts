@@ -1,9 +1,11 @@
 import { Bin } from "@Easy/Core/Shared/Util/Bin";
 import DSClient from "./Client";
-import { Network } from "Code/Shared/Network";
 import { Renderer } from "./Draw/Renderer";
 import { DrawInformation } from "Code/Shared/Types";
 import { Animation } from "./Draw/Animation";
+import { Game } from "@Easy/Core/Shared/Game";
+import Link from "@inkyaker/DualLink/Code";
+import Framework from "./Framework";
 
 export default class ClientReplicator extends AirshipBehaviour {
     public Connections = new Bin()
@@ -14,26 +16,19 @@ export default class ClientReplicator extends AirshipBehaviour {
     @NonSerialized() public Animation: Animation
     @NonSerialized() public IsHost: boolean
 
-    public Arguments = new Map<keyof DrawInformation, DrawInformation[keyof DrawInformation]>()
-    public Changed = new Map<keyof DrawInformation, DrawInformation[keyof DrawInformation]>()
+    private Link: Link<DrawInformation>
 
     override Start() {
-        this.IsHost = this.Client.enabled
+        this.IsHost = this.Client.Player === Game.localPlayer
+        this.Link = Framework.Get().Links.get(this.Client.Player)!
 
-        print(`Starting replication as ${this.IsHost ? "Host!" : "Peer!"}`)
+        print(`Starting replication for ${this.Client.Player.username} as ${this.IsHost ? "Host" : "Peer"}.`)
 
         if (!this.IsHost) {
-            this.Connections.Add(Network.Replication.ChangedPacket.client.OnServerEvent((ChangedArgs, NetID) => this.UpdateArgs(ChangedArgs, NetID!)))
-            this.Connections.Add(Network.Replication.InitialPacket.client.OnServerEvent((ChangedArgs, NetID) => this.UpdateArgs(ChangedArgs, NetID!)))
-
             this.Draw = new Renderer(this.Client.transform, this.Client.RigParent)
             this.Animation = new Animation(this.Client.EventListener, this.Client.RigParent.transform, this.Client.Animations, this.Client.Controller, {} as unknown as DrawInformation)
-
             return
         }
-
-        const DrawInfo = this.Client.GetRenderInfo()
-        Network.Replication.InitialPacket.client.FireServer(DrawInfo as unknown as Map<keyof DrawInformation, DrawInformation[keyof DrawInformation]>)
     }
 
     override OnDestroy() {
@@ -44,40 +39,27 @@ export default class ClientReplicator extends AirshipBehaviour {
     override LateUpdate(DeltaTime: number) {
         // host only sends data
         if (this.IsHost) {
-            const DrawInfo = this.Client.GetRenderInfo()
+            const DrawInfo = this.Client.RenderInfo
 
             for (const [Index, Value] of pairs(DrawInfo)) {
-                if (this.Arguments.get(Index) !== Value)
-                    this.Changed.set(Index, Value)
-
-                this.Arguments.set(Index, Value)
+                if (this.Link.Data[Index] !== Value) {
+                    this.Link.SetValue(`${Index}`, Value)
+                }
             }
-
-            if (this.Changed.size() > 0) {
-                Network.Replication.ChangedPacket.client.FireServer(this.Changed)
-                this.Changed.clear()
-            }
+            
+            this.Link.PrepareReplicate()
 
             return
         }
 
-        // client does all the work to piece it together
-        this.Draw.Draw(DeltaTime, this.Arguments as unknown as DrawInformation)
+        // client does drawing work
+        this.Animation.DrawInfo = this.Link.Data
+        this.Animation.Speed = this.Link.Data.AnimationSpeed
+        this.Animation.Current = this.Link.Data.Animation
+
+        this.Draw.Draw(DeltaTime, this.Link.Data)
         this.Animation.Animate(DeltaTime)
 
         this.Animation.DynamicTilt(DeltaTime)
-    }
-
-    public UpdateArgs(ChangedArgs: Map<keyof DrawInformation, DrawInformation[keyof DrawInformation]>, NetID: number) {
-        if (this.Net.netId === NetID) {
-            for (const [Index, Value] of ChangedArgs) {
-                const ArgExists = this.Arguments.get(Index)
-
-                if (ArgExists)
-                    if (typeOf(ArgExists) !== typeOf(Value)) continue
-
-                this.Arguments.set(Index, Value)
-            }
-        }
     }
 }

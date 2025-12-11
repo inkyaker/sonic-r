@@ -8,11 +8,12 @@ import { ObjectController } from "./Object/ObjectController"
 import { Rail, SetRail } from "./Modules/Rail"
 import { SoundController } from "./Draw/Sound"
 import { PlaneProject } from "Code/Shared/Common/Utility/VUtil"
-import { CFrame, DrawInformation } from "Code/Shared/Types"
+import { CFrame, DrawInformation, GetRenderInfo } from "Code/Shared/Types"
 import { Bin } from "@Easy/Core/Shared/Util/Bin"
 import _OBJBase from "./Object/Objects/Base"
 import Config, { Constants } from "Code/Shared/Components/ConfigSingleton"
 import UI from "./UI"
+import { Player } from "@Easy/Core/Shared/Player/Player"
 
 /**
  * Flags list
@@ -117,6 +118,7 @@ export default class DSClient extends AirshipBehaviour {
     // Main
     public Controller: Animator
     public RigParent: GameObject
+    @NonSerialized() public Player: Player
 
     @NonSerialized() public Position: Vector3
     @NonSerialized() public Speed: Vector3
@@ -131,7 +133,7 @@ export default class DSClient extends AirshipBehaviour {
     public GameState: GameState
 
     // Character info
-    public Config: Config["Character"]
+    @NonSerialized() public Config: Config["Character"]
     public Animations: typeof Animations = Animations
 
     // Modules
@@ -153,7 +155,7 @@ export default class DSClient extends AirshipBehaviour {
     public EventListener: AnimationEventListener
     public HomingAttack: HomingAttack
 
-    private RenderInfo: DrawInformation
+    public RenderInfo: DrawInformation = GetRenderInfo()
 
     override Start() {
         this.Config = Constants().Character
@@ -183,9 +185,6 @@ export default class DSClient extends AirshipBehaviour {
             this.HomingAttack = new HomingAttack()
 
             this.PreviousAngle = Quaternion.identity
-
-            this.UpdateRenderInfo()
-            this.Animation.DrawInfo = this.GetRenderInfo()
         })
 
         if (!Success) {
@@ -202,42 +201,15 @@ export default class DSClient extends AirshipBehaviour {
 
     /**
      * Destroys the Client
-     */
+    */
     public Destroy() {
         this.Renderer.Destroy()
 
         this.Sound.Destroy()
     }
 
-    protected UpdateRenderInfo() {
-        const JumpBall = this.Flags.BallEnabled && this.Animation.Current === "Roll"
-        const SpindashBall = this.Flags.BallEnabled && this.Animation.Current === "Spindash"
-        const AnimationRate = this.Animation.GetRate()
-
-        this.RenderInfo = {
-            Speed: this.Speed,
-
-            RailOffset: this.Rail.RailOffset,
-            RailBalance: this.Rail.RailBalance,
-            Position: this.RenderCFrame.Position,
-            Rotation: this.RenderCFrame.Rotation,
-            JumpBall: JumpBall,
-            SpindashBall: SpindashBall,
-
-            AnimationRate: AnimationRate,
-            JumpBallHeight: this.Ground.Grounded ? this.Config.JumpBallHeightRoll : this.Config.JumpBallHeightAir,
-            JumpBallStretch: Constants().JumpBallStretchCurve.Evaluate(this.Flags.JumpStretchTimer / this.Config.JumpStretchTimer) * this.Config.JumpBallStretch,
-            JumpBallSpeed: Constants().JumpBallRotationSpeed.Evaluate(math.clamp01(AnimationRate / 20)),
-
-            SpindashSpeed: Constants().SpindashBallRotationSpeed.Evaluate(math.clamp01(this.Flags.SpindashSpeed / 10) + .15),
-
-            Animation: this.Animation.Current,
-            AnimationSpeed: this.Animation.Speed,
-        }
-    }
-
-    public GetRenderInfo() {
-        while (!this.RenderInfo) { } // purposefully freeze
+    private GetAndUpdateRenderInfo() {
+        this.RenderInfo = GetRenderInfo(this)
         return this.RenderInfo
     }
 
@@ -256,8 +228,7 @@ export default class DSClient extends AirshipBehaviour {
         // Interpolate positions
         this.RenderCFrame = this.LastCFrame.Lerp(new CFrame(this.Position, this.Angle), this.State.TickTimer)
 
-        this.UpdateRenderInfo()
-        this.Renderer.Draw(DeltaTime, this.GetRenderInfo())
+        this.Renderer.Draw(DeltaTime, this.GetAndUpdateRenderInfo())
 
         this.Object.DrawObjects(DeltaTime)
         this.Camera.Update(DeltaTime)
@@ -270,6 +241,10 @@ export default class DSClient extends AirshipBehaviour {
         HUD.PlayerRings = this.GameState.Rings
         HUD.PlayerScore = this.GameState.Score
         HUD.PlayerTime = this.GameState.Time
+
+        this.Animation.DrawInfo = this.RenderInfo
+        this.Animation.DrawInfo.Speed = this.Speed
+        this.Animation.Animate(1 / 60)
 
         Profiler.EndSample()
     }

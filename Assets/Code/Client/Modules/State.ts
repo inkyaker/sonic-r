@@ -41,10 +41,6 @@ export class SrcState {
         } else {
             Client.State.Current.AfterUpdateHook(Client)
         }
-
-        Client.Animation.DrawInfo = Client.GetRenderInfo()
-        Client.Animation.DrawInfo.Speed = Client.Speed
-        Client.Animation.Animate(1 / 60)
     }
 
     /**
