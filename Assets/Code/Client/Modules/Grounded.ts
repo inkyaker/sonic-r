@@ -11,7 +11,7 @@ import { CheckRail } from "./Rail"
  * @augments SrcState
  */
 export class StateGrounded extends SrcState {
-    private LockedAnimations = new Set(["LandMoving", "Land"])
+    private LockedAnimations = new Set(["LandMoving", "Land", "JogStart"])
 
     constructor() {
         super()
@@ -32,6 +32,11 @@ export class StateGrounded extends SrcState {
 
     protected AfterUpdateHook(Client: DSClient) {
         if (Client.Ground.Grounded) {
+            if (Client.Speed.magnitude <= .1 && Client.Input.Stick.magnitude > 0) {
+                Client.Speed = Client.Speed.WithX(1.5)
+                Client.Animation.Current = "JogStart"
+            }
+
             const Slip = math.sqrt(1)
             const Acceleration = math.min(math.abs(Client.Speed.x) / Client.Config.CrashSpeed, 1)
 

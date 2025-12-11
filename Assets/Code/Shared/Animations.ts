@@ -37,7 +37,7 @@ export const Animations = {
 		EndAnimation: "Run",
 		Transitions: {
 			To: {
-				Run: .125
+				Run: 0
 			}
 		}
 	},
@@ -88,7 +88,8 @@ export const Animations = {
 		[0]: { Name: "Spring" },
 		Transitions: {
 			To: {
-				All: .4
+				Fall: .4,
+				HomingAttack: 0.05,
 			}
 		}
 	},
@@ -97,14 +98,14 @@ export const Animations = {
 			Name: "Jog",
 			Position: 0,
 			Speed: {
-				Base: .25,
-				Increment: 1.15,
+				Base: 1,
+				Increment: .75,
 				Absolute: false
 			}
 		},
 		[1]: {
 			Name: "Run",
-			Position: 3.5,
+			Position: 4,
 			Speed: {
 				Base: 0,
 				Increment: 1,
@@ -120,6 +121,18 @@ export const Animations = {
 				Absolute: false
 			}
 		},
+
+		Transitions: {
+			From: {
+				JogStart: 0
+			}
+		}
+	},
+	JogStart: {
+		[0]: {
+			Name: "JogStart"
+		},
+		EndAnimation: "Run"
 	},
 	Rail: {
 		[0]: { Name: "Rail" }

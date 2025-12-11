@@ -234,12 +234,8 @@ export const PhysicsHandler = {
 
             if (Gravity.y <= 0 && Gravity.y > -.87) {
                 // Get turn
-                if (Gravity.x < 0) {
-                    Gravity = Gravity.WithX(-Gravity.x)
-                }
-
-                const Turn = -math.atan2(Gravity.z / Client.Config.Scale, Gravity.x / Client.Config.Scale)
-                const MaxTurn = math.abs(Gravity.z / Client.Config.Scale) * math.rad(8.4375)
+                const Turn = -math.atan2(Gravity.z, math.abs(Gravity.x))
+                const MaxTurn = math.abs(Gravity.z) * math.rad(8.4375)
 
                 PhysicsHandler.Turn(Client, math.clamp(Turn, -MaxTurn, MaxTurn))
             }
