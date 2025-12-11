@@ -2,6 +2,7 @@ import { Keyboard } from "@Easy/Core/Shared/UserInput";
 import DSClient from "../Client";
 import { ButtonState } from "./ButtonState";
 import * as VUtil from "Code/Shared/Common/Utility/VUtil";
+import { Game } from "@Easy/Core/Shared/Game";
 
 type ButtonUnion = ExtractKeys<DSInput["Button"], ButtonState>
 
@@ -27,7 +28,7 @@ export const ControllerMap = {
  */
 export class DSInput {
     public Button
-    public PlatformContext: "KBJS"|"Touch"
+    public PlatformContext: "KBJS" | "Touch"
     public Stick
     private Client: DSClient
 
@@ -64,7 +65,7 @@ export class DSInput {
                 if (Button.KeyCodes.find(Object => Object === Key)) {
                     List.push(Index)
                 }
-            }  
+            }
 
             Hashed = List
             ButtonHash.set(Key, Hashed)
@@ -74,7 +75,7 @@ export class DSInput {
     }
 
     public GetInputState() {
-        const KeyState = new Set<Key|KeyCode>()
+        const KeyState = new Set<Key | KeyCode>()
 
         for (const [ID, State] of pairs(this.Button)) {
             for (const [_, Button] of pairs(State.Keys)) {
@@ -103,7 +104,7 @@ export class DSInput {
                 }
             })
         }
-        
+
         return KeyList
     }
 
@@ -122,7 +123,13 @@ export class DSInput {
 
         // Stick
         if (this.PlatformContext === "KBJS") {
-            this.Stick = new Vector2(Input.GetAxis("HorizontalKB"), Input.GetAxis("VerticalKB")).add(new Vector2(Input.GetAxis("HorizontalJS"), -Input.GetAxis("VerticalJS")))
+            // TOOD: once airship controller support is out reimplement this correctly
+            this.Stick = Game.IsEditor() ?
+                new Vector2(Input.GetAxis("HorizontalKB"), Input.GetAxis("VerticalKB")).add(new Vector2(Input.GetAxis("HorizontalJS"), -Input.GetAxis("VerticalJS"))) :
+                new Vector2(
+                    (Keyboard.IsKeyDown(Key.A) ? -1 : 0) + (Keyboard.IsKeyDown(Key.D) ? 1 : 0),
+                    (Keyboard.IsKeyDown(Key.W) ? -1 : 0) + (Keyboard.IsKeyDown(Key.S) ? 1 : 0),
+                )
         } else {
 
         }
