@@ -50,7 +50,7 @@ export default class _OBJSpring extends _OBJBase implements AnimateObject<Animat
         Client.Flags.DirectVelocity = this.DirectVelocity
         Client.Flags.LockTimer = math.ceil(this.LockTime * 60)
         Client.State.Current = Client.State.States.Airborne
-        Client.Animation.Current = "Spring"
+        Client.Animation.Current = "SpringStart"
         Client.Ground.Grounded = false
 
         this.AnimationController.AnimationState = "Activate"

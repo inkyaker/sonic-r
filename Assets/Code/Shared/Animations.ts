@@ -12,7 +12,7 @@ export interface InferredAnimation {
 }
 
 export interface AnimationData {
-	EndAnimation?: keyof typeof Animations,
+	EndAnimation?: ValidAnimation,
 	Transitions?: {
 		From?: {
 			[Index: string]: number | undefined
@@ -83,6 +83,17 @@ export const Animations = {
 	Skid: {
 		[0]: { Name: "Skid" },
 		EndAnimation: "Idle",
+	},
+	SpringStart: {
+		[0]: { Name: "SpringStart" },
+		EndAnimation: "Spring",
+
+		Transitions: {
+			To: {
+				Spring: 0
+			}
+		}
+
 	},
 	Spring: {
 		[0]: { Name: "Spring" },
