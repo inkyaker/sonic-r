@@ -234,10 +234,10 @@ export const PhysicsHandler = {
 
             if (Gravity.y <= 0 && Gravity.y > -.87) {
                 // Get turn
-                const Turn = -math.atan2(Gravity.z, math.abs(Gravity.x))
+                const Turn = math.atan2(Gravity.z, math.abs(Gravity.x)) // src says -atan2 but that is backwards here?
                 const MaxTurn = math.abs(Gravity.z) * math.rad(8.4375)
 
-                PhysicsHandler.Turn(Client, math.clamp(Turn, -MaxTurn, MaxTurn))
+                PhysicsHandler.TurnRaw(Client, math.clamp(Turn, -MaxTurn, MaxTurn))
             }
         }
     },
