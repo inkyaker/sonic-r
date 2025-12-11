@@ -1,5 +1,3 @@
-import { Airship } from "@Easy/Core/Shared/Airship"
-
 /**
  * @class
  */

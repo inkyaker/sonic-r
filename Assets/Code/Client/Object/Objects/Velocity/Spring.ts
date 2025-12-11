@@ -2,7 +2,6 @@ import { CFrame } from "Code/Shared/Types"
 import _OBJBase from "../Base"
 import DSClient from "Code/Client/Client"
 import { AnimatedObject, AnimateObject } from "../Implementables"
-import { RegisterObject } from "../../ObjectController"
 
 type Animations = "None" | "Activate"
 

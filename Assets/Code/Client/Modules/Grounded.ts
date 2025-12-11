@@ -32,7 +32,7 @@ export class StateGrounded extends SrcState {
 
     protected AfterUpdateHook(Client: DSClient) {
         if (Client.Ground.Grounded) {
-            if (Client.Speed.magnitude <= .1 && Client.Input.Stick.magnitude > 0) {
+            if (Client.Speed.magnitude <= .1 && Client.Input.Stick.magnitude > 0 && math.abs(Client.Input.GetTurn()) <= math.rad(30)) {
                 Client.Speed = Client.Speed.WithX(1.5)
                 Client.Animation.Current = "JogStart"
             }

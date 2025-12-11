@@ -1,8 +1,6 @@
-import { InputAction } from "@Easy/Core/Shared/Input/InputAction"
 import { RegisterObject } from "../ObjectController"
 import { Bin } from "@Easy/Core/Shared/Util/Bin"
 import DSClient from "Code/Client/Client"
-import { Airship } from "@Easy/Core/Shared/Airship"
 
 export default class _OBJBase extends AirshipBehaviour {
     @NonSerialized() public Collider = this.gameObject.GetComponent<BoxCollider>()!

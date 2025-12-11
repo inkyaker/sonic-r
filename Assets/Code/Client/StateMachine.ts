@@ -2,7 +2,7 @@ import DSClient from "./Client"
 import { StateList } from "./States"
 import { SrcState } from "./Modules/State"
 import { CFrame } from "Code/Shared/Types"
-import Config, { Constants } from "Code/Shared/Components/ConfigSingleton"
+import { Constants } from "Code/Shared/Components/ConfigSingleton"
 import { MovingPlatforms } from "Code/Shared/Components/MovingPlatform"
 
 /**
