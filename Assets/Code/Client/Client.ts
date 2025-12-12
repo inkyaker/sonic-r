@@ -340,6 +340,7 @@ export default class DSClient extends AirshipBehaviour {
         this.Flags.Bounces = 0
         this.Flags.InBounce = false
         this.Flags.HomingTriggered = false
+        this.Flags.JumpTimer = 0
 
         UI.Get().SetHomingTarget(undefined)
     }
@@ -353,7 +354,8 @@ export default class DSClient extends AirshipBehaviour {
         this.Flags.LockTimer = 0
         this.Rail.RailTrick = 0
         this.Flags.HomingTriggered = false
-
+        this.Flags.JumpTimer = 0
+        
         SetRail(this)
     }
 
