@@ -3,6 +3,7 @@ import DSClient from "../Client";
 import { ButtonState } from "./ButtonState";
 import * as VUtil from "Code/Shared/Common/Utility/VUtil";
 import { Game } from "@Easy/Core/Shared/Game";
+import { Airship } from "@Easy/Core/Shared/Airship";
 
 type ButtonUnion = ExtractKeys<DSInput["Button"], ButtonState>
 
@@ -120,6 +121,9 @@ export class DSInput {
                 Button.Update(false)
             }
         }
+
+        // Stop moving when in chat
+        if (Airship.Chat.IsOpen()) return
 
         // Stick
         if (this.PlatformContext === "KBJS") {
