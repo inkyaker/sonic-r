@@ -5,6 +5,7 @@ import { CheckSkid } from "./Skid"
 import { CheckSpindash } from "./Spindash"
 import { SrcState } from "./State"
 import { CheckRail } from "./Rail"
+import { CFrame } from "Code/Shared/Types"
 
 /**
  * @class
@@ -32,9 +33,13 @@ export class StateGrounded extends SrcState {
 
     protected AfterUpdateHook(Client: DSClient) {
         if (Client.Ground.Grounded) {
-            if (Client.Speed.magnitude <= .1 && Client.Input.Stick.magnitude > 0 && math.abs(Client.Input.GetTurn()) <= math.rad(30)) {
-                Client.Speed = Client.Speed.WithX(1.5)
-                Client.Animation.Current = "JogStart"
+            if (Client.Speed.magnitude <= .1 && Client.Input.Stick.magnitude > 0) {
+                const Turn = Client.Input.GetTurn()
+                if (math.abs(Turn) <= math.rad(30)) {
+                    const TargetSpeed = Client.Angle.mul(Quaternion.Euler(0, math.deg(Turn), 0)).mul(Vector3.forward.mul(1.5))
+                    Client.Speed = Client.Speed.WithX(Client.ToLocal(TargetSpeed).x)
+                    Client.Animation.Current = "JogStart"
+                }
             }
 
             const Slip = math.sqrt(1)

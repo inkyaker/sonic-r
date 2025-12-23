@@ -47,9 +47,9 @@ export class Animation {
     private Tilts: Tilt[] = []
     public Turn: number = 0
     public WeightLayers = {
-        [0]: { Target: 1, Current: 1 },
-        [1]: { Target: 1, Current: 0 },
-        [2]: { Target: 1, Current: 0 },
+        0: { Target: 1, Current: 1 },
+        1: { Target: 1, Current: 0 },
+        2: { Target: 1, Current: 0 },
     }
 
     constructor(EventListener: AnimationEventListener, RigParent: Transform, public AnimList: typeof Animations, private Controller: Animator, public DrawInfo: DrawInformation) {
