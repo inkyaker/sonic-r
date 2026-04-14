@@ -1,7 +1,6 @@
 # This .gitignore file should be placed at the root of your Unity project 
 directory
 
-
 mono_crash.*
 
 #
@@ -57,7 +56,6 @@ ExportedObj/
 *.pidb.meta
 *.pdb.meta
 *.mdb.meta
-*.meta
 
 # Unity3D generated file on crash reports
 sysinfo.txt
@@ -108,18 +106,19 @@ Assets/FishNet.Config.XML
 bundles/
 Assets/TypeScriptEditorMetadata.aseditorinfo
 
-**/TextMesh Pro
 *.exr
 **/.vscode
+**/.config/biome.json
 *.prettierrc
-*.lighting
-*.player_version
-*.rsp
 *.vsconfig
 **/eslint.config.ts
 **/ProjectSettings
 *.bytes
 **/Editor/*.config
+.github
+.gitignore
+**/node_modules/.bin
+**/node_modules/@biomejs
 
 # Ignore all non-local packages
 
@@ -138,3 +137,11 @@ Assets/AirshipPackages/@inkyaker/DualLink/*
 Assets/AirshipPackages/@inkyaker.meta
 
 Assets/AirshipPackages/@inkyaker/DualLink.meta
+
+Assets/AirshipPackages/@inkyaker/CFrame/*
+
+Assets/AirshipPackages/@inkyaker/CFrame.meta
+
+Assets/AirshipPackages/@Easy/VoxelWorld/*
+
+Assets/AirshipPackages/@Easy/VoxelWorld.meta

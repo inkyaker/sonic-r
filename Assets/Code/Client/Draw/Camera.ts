@@ -16,7 +16,6 @@ function ExponentialVector(Vector: Vector2) {
  * @class
  */
 export class Camera {
-    private Client: DSClient
     public InputChanged: () => void
     public Zoom: number
     public Rotation: { X: number, Y: number, Z: number }
@@ -24,7 +23,7 @@ export class Camera {
     public CameraOffset: Vector3
     public Transform: Transform = GameObject.FindGameObjectWithTag("MainCamera").transform
 
-    constructor(Client: DSClient) {
+    constructor(private Client: DSClient) {
         this.Rotation = { X: 0, Y: 0, Z: 0 }
         this.Zoom = 32
         this.Client = Client
