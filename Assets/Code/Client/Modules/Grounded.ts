@@ -33,15 +33,6 @@ export class StateGrounded extends SrcState {
 
     protected AfterUpdateHook(Client: DSClient) {
         if (Client.Ground.Grounded) {
-            if (Client.Speed.magnitude <= .1 && Client.Input.Stick.magnitude > 0) {
-                const Turn = Client.Input.GetTurn()
-                if (math.abs(Turn) <= math.rad(30)) {
-                    const TargetSpeed = Client.Angle.mul(Quaternion.Euler(0, math.deg(Turn), 0)).mul(Vector3.forward.mul(1.5))
-                    Client.Speed = Client.Speed.WithX(Client.ToLocal(TargetSpeed).x)
-                    Client.Animation.Current = "JogStart"
-                }
-            }
-
             const Slip = math.sqrt(1)
             const Acceleration = math.min(math.abs(Client.Speed.x) / Client.Config.CrashSpeed, 1)
             
