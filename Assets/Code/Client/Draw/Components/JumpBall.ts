@@ -1,51 +1,55 @@
-import DSClient from "Code/Client/Client"
-import { DrawInformation } from "Code/Shared/Types"
+import { SingleDimensionSpring } from "Code/Shared/Common/SingleDimensionSpring";
+import type { DrawInformation } from "Code/Shared/Types";
 
 @AirshipComponentMenu("Draw/JumpBall")
 export default class JumpBall extends AirshipBehaviour {
-    @NonSerialized() public Enabled = true
-    private Rotation = 0
-    public RPM = 300
-    private RPS = 360 * (this.RPM / 60)
+	@NonSerialized() public Enabled = true;
+	private Rotation = 0;
+	public RPM = 300;
+	private RPS = 360 * (this.RPM / 60);
 
-    override Start() {
-        if ($CLIENT) {
-            this.SetEnabled(false)
-        }
-    }
+	private Stretch = new SingleDimensionSpring(0, 0, 0, .3, 5, 0.96, false);
 
-    public SetEnabled(Enabled: boolean) {
-        if (this.Enabled !== Enabled) {
-            this.Enabled = Enabled
+	override Start() {
+		if ($CLIENT) {
+			this.SetEnabled(false);
+		}
+	}
 
-            this.gameObject.SetActive(Enabled)
-        }
-    }
+	public SetEnabled(Enabled: boolean) {
+		if (this.Enabled !== Enabled) {
+			this.Enabled = Enabled;
 
-    public Draw(DeltaTime: number, DrawInfo: DrawInformation) {
-        if (this.Enabled) {
-            const RotationSpeed = DrawInfo.JumpBallSpeed
+			this.gameObject.SetActive(Enabled);
 
-            this.Rotation += DeltaTime * this.RPS * RotationSpeed
-            this.Rotation %= 360
+			this.Stretch.Update(0, 0, true);
+		}
+	}
 
-            this.transform.rotation = DrawInfo.Rotation.mul(Quaternion.Euler(-this.Rotation, 180, 0))
-            this.transform.localPosition = new Vector3(0, DrawInfo.JumpBallHeight, 0)
+	public Draw(DeltaTime: number, DrawInfo: DrawInformation) {
+		if (this.Enabled) {
+			const RotationSpeed = DrawInfo.JumpBallSpeed;
 
-            const Stretch = DrawInfo.JumpBallStretch
-            this.Block.SetFloat("_Stretch", 1 + Stretch)
-            this.Block.SetFloat("_Alpha", RotationSpeed)
-            this.Block.SetFloat("_Spin", -RotationSpeed * 30)
+			this.Rotation += DeltaTime * this.RPS * RotationSpeed;
+			this.Rotation %= 360;
 
-            this.ApplyBlock()
-        }
-    }
+			this.transform.rotation = DrawInfo.Rotation.mul(Quaternion.Euler(-this.Rotation, 180, 0));
+			this.transform.localPosition = new Vector3(0, DrawInfo.JumpBallHeight, 0);
 
-    public Block = new MaterialPropertyBlock()
-    public Parts: MeshRenderer[] = []
-    public ApplyBlock() {
-        for (const [_, Mesh] of pairs(this.Parts)) {
-            Mesh.SetPropertyBlock(this.Block)
-        }
-    }
+			this.Stretch.Update(DeltaTime, DrawInfo.JumpBallStretch);
+			this.Block.SetFloat("_Stretch", 1 + this.Stretch.CurrentValue);
+			this.Block.SetFloat("_Alpha", RotationSpeed);
+			this.Block.SetFloat("_Spin", -RotationSpeed * 30);
+
+			this.ApplyBlock();
+		}
+	}
+
+	public Block = new MaterialPropertyBlock();
+	public Parts: MeshRenderer[] = [];
+	public ApplyBlock() {
+		for (const [_, Mesh] of pairs(this.Parts)) {
+			Mesh.SetPropertyBlock(this.Block);
+		}
+	}
 }
