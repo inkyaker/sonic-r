@@ -1,5 +1,5 @@
 import { SingleDimensionSpring } from "Code/Shared/Common/SingleDimensionSpring";
-import type { DrawInformation } from "Code/Shared/Types";
+import { DrawInformation } from "Code/Shared/Types";
 
 @AirshipComponentMenu("Draw/JumpBall")
 export default class JumpBall extends AirshipBehaviour {
@@ -10,6 +10,11 @@ export default class JumpBall extends AirshipBehaviour {
 
 	private Stretch = new SingleDimensionSpring(0, 0, 0, .3, 5, 0.96, false);
 
+	override Start() {
+		if ($CLIENT) {
+			this.SetEnabled(false);
+		}
+	}
 	override Start() {
 		if ($CLIENT) {
 			this.SetEnabled(false);
@@ -53,3 +58,4 @@ export default class JumpBall extends AirshipBehaviour {
 		}
 	}
 }
+

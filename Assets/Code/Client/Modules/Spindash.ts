@@ -1,8 +1,8 @@
-import type DSClient from "Code/Client/Client";
+import DSClient from "Code/Client/Client";
 import { PhysicsHandler } from "Code/Client/Physics/Physics";
+import { SrcState } from "./State";
 import { CheckJump } from "./Jump";
 import { CheckRail } from "./Rail";
-import { SrcState } from "./State";
 
 /**
  * Function ran in `State.CheckInput`
@@ -35,6 +35,10 @@ export function CheckSpindash(Client: DSClient) {
  * @augments SrcState
  */
 export class StateSpindash extends SrcState {
+	constructor() {
+		super();
+	}
+
 	protected CheckInput(Client: DSClient) {
 		if (Client.Input.Button.Spindash.Activated) {
 			if (Client.Flags.SpindashSpeed < 10) {
@@ -46,7 +50,6 @@ export class StateSpindash extends SrcState {
 			Client.Sound.Stop("Character/SpindashChargeLoop.wav");
 			Client.Sound.Play("Character/SpindashRelease.wav");
 
-			Client.StretchJumpBall(0.5);
 			Client.Speed = Client.Speed.mul(new Vector3(0, 1, 1)).add(new Vector3(Client.Flags.SpindashSpeed, 0, 0));
 			Client.EnterBall();
 			Client.State.Current = Client.State.States.Roll;
@@ -59,6 +62,7 @@ export class StateSpindash extends SrcState {
 		PhysicsHandler.ApplyGravity(Client);
 		PhysicsHandler.Turn(Client, Client.Input.GetTurn(), undefined);
 		PhysicsHandler.Skid(Client);
+		//PhysicsHandler.AccelerateGrounded(Client)
 
 		if (Client.Ground.Grounded) {
 			Client.Animation.Current = "Spindash";
@@ -76,6 +80,10 @@ export class StateSpindash extends SrcState {
  * @augments SrcState
  */
 export class StateRoll extends SrcState {
+	constructor() {
+		super();
+	}
+
 	protected CheckInput(Client: DSClient) {
 		if (Client.Input.Button.Roll.Pressed || Client.Speed.x < Client.Config.RollGetUp) {
 			// TODO: ceil clip

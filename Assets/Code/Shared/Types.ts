@@ -1,6 +1,6 @@
-import type DSClient from "Code/Client/Client";
-import type { ValidAnimation } from "./Animations";
+import DSClient from "Code/Client/Client";
 import { Constants } from "./Components/ConfigSingleton";
+import { ValidAnimation } from "./Animations";
 
 export class CFrame {
 	public readonly Position: Vector3;
