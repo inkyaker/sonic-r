@@ -15,11 +15,6 @@ export default class JumpBall extends AirshipBehaviour {
 			this.SetEnabled(false);
 		}
 	}
-	override Start() {
-		if ($CLIENT) {
-			this.SetEnabled(false);
-		}
-	}
 
 	public SetEnabled(Enabled: boolean) {
 		if (this.Enabled !== Enabled) {

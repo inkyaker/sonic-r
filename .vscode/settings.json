@@ -67,5 +67,5 @@
         "source.removeUnusedImports": "always",
         "source.organizeImports.biome": "always"
     },
-    "dotnet.defaultSolution": "digitalswirl-unity.slnx"
+    "dotnet.defaultSolution": "sonic-r.slnx"
 }
