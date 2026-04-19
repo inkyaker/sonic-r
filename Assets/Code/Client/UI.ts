@@ -7,15 +7,16 @@ export default class UI extends AirshipSingleton {
 	@SerializeField()
 	private Camera: Camera;
 
-    @Header("HUD")
-    @SerializeField() private Gem: Image
-    @SerializeField() private RingsText: TMP_Text
-    @SerializeField() private ScoreText: TMP_Text
-    @SerializeField() private TimeText: TMP_Text
+	@Header("HUD")
+	@SerializeField()
+	private Gem: Image;
+	@SerializeField() private RingsText: TMP_Text;
+	@SerializeField() private ScoreText: TMP_Text;
+	@SerializeField() private TimeText: TMP_Text;
 
-    @NonSerialized() public PlayerRings = 0
-    @NonSerialized() public PlayerTime = 0
-    @NonSerialized() public PlayerScore = 0
+	@NonSerialized() public PlayerRings = 0;
+	@NonSerialized() public PlayerTime = 0;
+	@NonSerialized() public PlayerScore = 0;
 
 	private UpdatePlayerValues() {
 		this.TimeText.text = this.FormatTime(this.PlayerTime);

@@ -1,19 +1,20 @@
+import type { Player } from "@Easy/Core/Shared/Player/Player";
+import { Bin } from "@Easy/Core/Shared/Util/Bin";
+import { Animations } from "Code/Shared/Animations";
+import { PlaneProject } from "Code/Shared/Common/Utility/VUtil";
+import type Config from "Code/Shared/Components/ConfigSingleton";
+import { Constants } from "Code/Shared/Components/ConfigSingleton";
+import { CFrame, type DrawInformation, GetRenderInfo } from "Code/Shared/Types";
+import { DSInput } from "./Control/Input";
+import { Animation } from "./Draw/Animation";
 import { Camera } from "./Draw/Camera";
 import { Renderer } from "./Draw/Renderer";
-import { StateMachine } from "./StateMachine";
-import { DSInput } from "./Control/Input";
-import { Animations } from "Code/Shared/Animations";
-import { Animation } from "./Draw/Animation";
-import { ObjectController } from "./Object/ObjectController";
-import { Rail, SetRail } from "./Modules/Rail";
 import { SoundController } from "./Draw/Sound";
-import { PlaneProject } from "Code/Shared/Common/Utility/VUtil";
-import { CFrame, DrawInformation, GetRenderInfo } from "Code/Shared/Types";
-import { Bin } from "@Easy/Core/Shared/Util/Bin";
-import _OBJBase from "./Object/Objects/Base";
-import Config, { Constants } from "Code/Shared/Components/ConfigSingleton";
+import { Rail, SetRail } from "./Modules/Rail";
+import { ObjectController } from "./Object/ObjectController";
+import type _OBJBase from "./Object/Objects/Base";
+import { StateMachine } from "./StateMachine";
 import UI from "./UI";
-import { Player } from "@Easy/Core/Shared/Player/Player";
 
 /**
  * Flags list
@@ -361,8 +362,12 @@ export default class DSClient extends AirshipBehaviour {
 		SetRail(this);
 	}
 
-	public StretchJumpBall() {
-		this.Flags.JumpStretchTimer = this.Config.JumpStretchTimer;
+	/**
+	 * Stretch and compress jumpball vertically
+	 * @param StretchTime time multiplier
+	 */
+	public StretchJumpBall(StretchTime?: number) {
+		this.Flags.JumpStretchTimer = math.ceil(this.Config.JumpStretchTimer * (StretchTime ?? 1));
 	}
 
 	/**

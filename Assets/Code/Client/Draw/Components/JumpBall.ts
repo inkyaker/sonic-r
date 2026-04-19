@@ -8,7 +8,7 @@ export default class JumpBall extends AirshipBehaviour {
 	public RPM = 300;
 	private RPS = 360 * (this.RPM / 60);
 
-	private Stretch = new SingleDimensionSpring(0, 0, 0, .3, 5, 0.96, false);
+	private Stretch = new SingleDimensionSpring(0, 0, 0, 0.3, 5, 0.96, false);
 
 	override Start() {
 		if ($CLIENT) {
@@ -53,4 +53,3 @@ export default class JumpBall extends AirshipBehaviour {
 		}
 	}
 }
-
