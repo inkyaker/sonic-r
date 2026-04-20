@@ -8,10 +8,6 @@ import { PhysicsHandler } from "Code/Client/Physics/Physics";
  * @augments SrcState
  */
 export class StateHurt extends SrcState {
-	constructor() {
-		super();
-	}
-
 	protected CheckInput(Client: DSClient) {
 		return CheckRail(Client);
 	}

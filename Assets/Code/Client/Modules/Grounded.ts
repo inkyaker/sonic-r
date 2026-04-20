@@ -14,10 +14,6 @@ import { CFrame } from "Code/Shared/Types";
 export class StateGrounded extends SrcState {
 	private LockedAnimations = new Set(["LandMoving", "Land", "JogStart"]);
 
-	constructor() {
-		super();
-	}
-
 	protected CheckInput(Client: DSClient) {
 		return CheckJump(Client) || CheckSpindash(Client) || CheckSkid(Client) || CheckRail(Client);
 	}
