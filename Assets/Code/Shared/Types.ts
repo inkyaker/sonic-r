@@ -1,6 +1,6 @@
-import DSClient from "Code/Client/Client";
+import type DSClient from "Code/Client/Client";
+import type { ValidAnimation } from "./Animations";
 import { Constants } from "./Components/ConfigSingleton";
-import { ValidAnimation } from "./Animations";
 
 export function ToFloat3(Input: Vector3) {
 	return new float3(Input.x, Input.y, Input.z);
