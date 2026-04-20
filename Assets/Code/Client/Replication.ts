@@ -1,10 +1,10 @@
-import { Bin } from "@Easy/Core/Shared/Util/Bin";
-import DSClient from "./Client";
-import { Renderer } from "./Draw/Renderer";
-import { DrawInformation } from "Code/Shared/Types";
-import { Animation } from "./Draw/Animation";
 import { Game } from "@Easy/Core/Shared/Game";
-import Link from "@inkyaker/DualLink/Code";
+import { Bin } from "@Easy/Core/Shared/Util/Bin";
+import type { DrawInformation } from "Code/Shared/Types";
+import type { DualLink } from "@inkyaker/DualLink/Code";
+import type DSClient from "./Client";
+import { Animation } from "./Draw/Animation";
+import { Renderer } from "./Draw/Renderer";
 import Framework from "./Framework";
 
 export default class ClientReplicator extends AirshipBehaviour {
@@ -19,7 +19,7 @@ export default class ClientReplicator extends AirshipBehaviour {
 	@NonSerialized() public Animation: Animation;
 	@NonSerialized() public IsHost: boolean;
 
-	private Link: Link<DrawInformation>;
+	private Link: DualLink<DrawInformation>;
 
 	override Start() {
 		this.IsHost = this.Client.Player === Game.localPlayer;
@@ -44,7 +44,7 @@ export default class ClientReplicator extends AirshipBehaviour {
 
 			for (const [Index, Value] of pairs(DrawInfo)) {
 				if (this.Link.Data[Index] !== Value) {
-					this.Link.SetValue(`${Index}`, Value);
+					this.Link.Data[Index] = Value as never;
 				}
 			}
 
