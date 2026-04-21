@@ -5914,6 +5914,10 @@ PrefabInstance:
       propertyPath: metadata.properties.Array.data[2].serializedObject
       value: 
       objectReference: {fileID: 1453461607}
+    - target: {fileID: 6496708274493597318, guid: a9ce5a9147a29d243937bb5f0ceb3adb, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: b0c347ec1a2e5da4b82225dd2335c2ec, type: 2}
     - target: {fileID: 7032100471684149738, guid: a9ce5a9147a29d243937bb5f0ceb3adb, type: 3}
       propertyPath: m_Name
       value: Sonic

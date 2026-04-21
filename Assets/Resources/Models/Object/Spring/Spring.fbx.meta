@@ -3,9 +3,14 @@ guid: d0517cf18e186df4294b6e5baa132f97
 ModelImporter:
   serializedVersion: 22200
   internalIDToNameTable: []
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Spring
+    second: {fileID: 2100000, guid: 8d031b5dadb112b42aed90757dbdcef3, type: 2}
   materials:
-    materialImportMode: 0
+    materialImportMode: 2
     materialName: 0
     materialSearch: 1
     materialLocation: 1
